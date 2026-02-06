@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { trackUserInteraction, getAllInteractions } from './service';
 
-export const trackInteraction = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const trackInteraction = asyncHandler(async (req: Request, res: Response) => {
   const { interactionType, metadata, sessionId } = req.body;
   const userId = req.user?.id;
   
@@ -20,7 +19,7 @@ export const trackInteraction = asyncHandler(async (req: AuthRequest, res: Respo
   });
 });
 
-export const getInteractions = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getInteractions = asyncHandler(async (req: Request, res: Response) => {
   const interactions = await getAllInteractions();
 
   res.json({

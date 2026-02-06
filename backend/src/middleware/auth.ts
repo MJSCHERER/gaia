@@ -5,16 +5,8 @@ import { createError } from './errorHandler';
 
 const prisma = new PrismaClient();
 
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
-}
-
 export const authenticate = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -70,7 +62,7 @@ export const authenticate = async (
 };
 
 export const authorize = (...roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(createError('Authentication required', 401));
     }
@@ -84,7 +76,7 @@ export const authorize = (...roles: string[]) => {
 };
 
 export const optionalAuth = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {

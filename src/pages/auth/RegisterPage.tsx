@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -61,10 +62,16 @@ export default function RegisterPage() {
       });
       toast.success('Registration successful! Please check your email to verify.');
       navigate('/login');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Registration failed');
-    } finally {
-      setIsLoading(false);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(
+          error.response?.data?.message || 'Registration failed'
+        );
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Registration failed');
+      }
     }
   };
 

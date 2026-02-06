@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { getUserWishlist, addItem, removeItem } from './service';
 
-export const getWishlist = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const wishlist = await getUserWishlist(userId);
 
@@ -13,7 +12,7 @@ export const getWishlist = asyncHandler(async (req: AuthRequest, res: Response) 
   });
 });
 
-export const addToWishlist = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const addToWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId } = req.body;
   
@@ -25,7 +24,7 @@ export const addToWishlist = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-export const removeFromWishlist = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId } = req.params;
   

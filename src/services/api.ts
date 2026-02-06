@@ -1,6 +1,22 @@
 import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store';
 
+type ShippingAddress = {
+  firstName: string;
+  lastName: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  state?: string;
+};
+
+type InteractionPayload = {
+  interactionType: string;
+  metadata?: Record<string, unknown>;
+  sessionId?: string;
+};
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Create axios instance
@@ -157,7 +173,10 @@ export const purchasesApi = {
 
 // Payments API
 export const paymentsApi = {
-  createIntent: (items: Array<{ artworkId: string; quantity: number }>, shippingAddress?: any) =>
+  createIntent: (
+    items: Array<{ artworkId: string; quantity: number }>,
+    shippingAddress?: ShippingAddress
+  ) =>
     api.post('/payments/create-intent', { items, shippingAddress }),
   confirmPayment: (paymentIntentId: string) =>
     api.post('/payments/confirm', { paymentIntentId }),
@@ -178,11 +197,8 @@ export const newsletterApi = {
 
 // Interactions API
 export const interactionsApi = {
-  track: (data: {
-    interactionType: string;
-    metadata?: any;
-    sessionId?: string;
-  }) => api.post('/interactions', data),
+  track: (data: InteractionPayload) =>
+    api.post('/interactions', data),
   getInteractions: () => api.get('/interactions'),
 };
 

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import {
   getArtworks,
   getArtwork,
@@ -42,7 +41,7 @@ export const getArtworkBySlug = asyncHandler(
 );
 
 export const createArtwork = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const userId = req.user!.id;
     const artwork = await createNewArtwork(userId, req.body);
 
@@ -55,7 +54,7 @@ export const createArtwork = asyncHandler(
 );
 
 export const updateArtwork = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const { id } = req.params;
     const userId = req.user!.id;
     const artwork = await updateArtworkById(id, userId, req.body);
@@ -69,7 +68,7 @@ export const updateArtwork = asyncHandler(
 );
 
 export const deleteArtwork = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const { id } = req.params;
     const userId = req.user!.id;
     await deleteArtworkById(id, userId);

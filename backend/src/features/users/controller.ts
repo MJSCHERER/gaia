@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { getAllUsers, getUserById, updateUserById, deleteUserById } from './service';
 
-export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await getAllUsers();
 
   res.json({
@@ -12,7 +11,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   });
 });
 
-export const getUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getUser = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await getUserById(id);
 
@@ -22,7 +21,7 @@ export const getUser = asyncHandler(async (req: AuthRequest, res: Response) => {
   });
 });
 
-export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const requestingUserId = req.user!.id;
   
@@ -35,7 +34,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   });
 });
 
-export const deleteUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   await deleteUserById(id);
 

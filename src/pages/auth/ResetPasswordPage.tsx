@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react';
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -53,10 +54,16 @@ export default function ResetPasswordPage() {
       setIsSuccess(true);
       toast.success('Password reset successfully');
       setTimeout(() => navigate('/login'), 2000);
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to reset password');
-    } finally {
-      setIsLoading(false);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(
+          error.response?.data?.message || 'Failed to reset password'
+        );
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Failed to reset password');
+      }
     }
   };
 

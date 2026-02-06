@@ -14,7 +14,7 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
-!frontend/.env
+!.env
 
 # =========================
 # Build Outputs

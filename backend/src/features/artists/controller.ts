@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import {
   getArtists,
   getArtist,
@@ -76,7 +75,7 @@ export const getArtistPublications = asyncHandler(
 );
 
 export const createArtistProfile = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const userId = req.user!.id;
     const artist = await createArtist(userId, req.body);
 
@@ -89,7 +88,7 @@ export const createArtistProfile = asyncHandler(
 );
 
 export const updateArtistProfile = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const { id } = req.params;
     const userId = req.user!.id;
     const artist = await updateArtist(id, userId, req.body);

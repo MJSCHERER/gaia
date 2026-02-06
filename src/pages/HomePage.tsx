@@ -1,10 +1,28 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import LoadingScreen from '@/components/LoadingScreen';
+
+type Star = {
+  left: string;
+  top: string;
+  opacity: number;
+  duration: number;
+  delay: number;
+};
+
+function generateStars(count: number): Star[] {
+  return Array.from({ length: count }).map(() => ({
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    opacity: Math.random() * 0.8 + 0.2,
+    duration: Math.random() * 3 + 2,
+    delay: Math.random() * 2,
+  }));
+}
 
 // Lazy load 3D components (heavy)
 const ImageRing3D = lazy(() => import('@/components/3d/ImageRing3D'));
@@ -130,25 +148,27 @@ export default function HomePage() {
 
 // Star Field Component
 function StarField() {
+  const [stars] = useState<Star[]>(() => generateStars(100));
+
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {Array.from({ length: 100 }).map((_, i) => (
+      {stars.map((star, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-white rounded-full"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.8 + 0.2,
+            left: star.left,
+            top: star.top,
+            opacity: star.opacity,
           }}
           animate={{
             opacity: [0.2, 1, 0.2],
             scale: [1, 1.2, 1],
           }}
           transition={{
-            duration: Math.random() * 3 + 2,
+            duration: star.duration,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: star.delay,
           }}
         />
       ))}

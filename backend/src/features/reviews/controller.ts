@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { getArtworkReviews, createNewReview, approveReviewById, deleteReviewById } from './service';
 
 export const getReviews = asyncHandler(async (req: Request, res: Response) => {
@@ -13,7 +12,7 @@ export const getReviews = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const createReview = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createReview = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId, rating, comment } = req.body;
   
@@ -26,7 +25,7 @@ export const createReview = asyncHandler(async (req: AuthRequest, res: Response)
   });
 });
 
-export const approveReview = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const approveReview = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   
   const review = await approveReviewById(id);
@@ -38,7 +37,7 @@ export const approveReview = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-export const deleteReview = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deleteReview = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   
   await deleteReviewById(id);

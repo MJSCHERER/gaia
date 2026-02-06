@@ -1,17 +1,22 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
+import type { SignOptions } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { createError } from '../../middleware/errorHandler';
 import { sendEmail } from '../../services/email';
-import { logger } from '../../utils/logger';
+// import { logger } from '../../utils/logger';
 
 const prisma = new PrismaClient();
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m';
-const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN: SignOptions['expiresIn'] =
+  (process.env.JWT_EXPIRES_IN as SignOptions['expiresIn']) || '15m';
+
+const JWT_REFRESH_EXPIRES_IN: SignOptions['expiresIn'] =
+  (process.env.JWT_REFRESH_EXPIRES_IN as SignOptions['expiresIn']) || '7d';
+
 
 // Generate tokens
 export const generateTokens = (user: any) => {

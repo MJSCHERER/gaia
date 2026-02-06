@@ -48,12 +48,12 @@ const queryClient = new QueryClient({
 
 function App() {
   const { i18n } = useTranslation();
+  const { language, dir } = i18n;
 
   useEffect(() => {
-    // Set document direction and language
-    document.documentElement.lang = i18n.language;
-    document.documentElement.dir = i18n.dir();
-  }, [i18n.language]);
+    document.documentElement.lang = language;
+    document.documentElement.dir = dir();
+  }, [language, dir]);
 
   return (
     <QueryClientProvider client={queryClient}>

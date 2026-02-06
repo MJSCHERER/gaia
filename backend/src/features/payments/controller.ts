@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { createIntent, confirmPaymentIntent, handleWebhook } from './service';
 
-export const createPaymentIntent = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createPaymentIntent = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { items, shippingAddress } = req.body;
   
@@ -15,7 +14,7 @@ export const createPaymentIntent = asyncHandler(async (req: AuthRequest, res: Re
   });
 });
 
-export const confirmPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const confirmPayment = asyncHandler(async (req: Request, res: Response) => {
   const { paymentIntentId } = req.body;
   
   const result = await confirmPaymentIntent(paymentIntentId);
@@ -26,7 +25,7 @@ export const confirmPayment = asyncHandler(async (req: AuthRequest, res: Respons
   });
 });
 
-export const getPaymentMethods = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPaymentMethods = asyncHandler(async (req: Request, res: Response) => {
   res.json({
     success: true,
     data: {

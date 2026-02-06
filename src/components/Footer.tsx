@@ -22,6 +22,7 @@ export default function Footer() {
       toast.success('Successfully subscribed to newsletter!');
       setEmail('');
     } catch (error) {
+      console.error('Newsletter subscription failed:', error);
       toast.error('Failed to subscribe. Please try again.');
     } finally {
       setIsLoading(false);

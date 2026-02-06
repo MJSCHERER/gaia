@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { getUserCart, addItemToCart, updateItem, removeItem, clearUserCart } from './service';
 
-export const getCart = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const cart = await getUserCart(userId);
 
@@ -13,7 +12,7 @@ export const getCart = asyncHandler(async (req: AuthRequest, res: Response) => {
   });
 });
 
-export const addToCart = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const addToCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId, quantity } = req.body;
   
@@ -26,7 +25,7 @@ export const addToCart = asyncHandler(async (req: AuthRequest, res: Response) =>
   });
 });
 
-export const updateCartItem = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateCartItem = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { itemId } = req.params;
   const { quantity } = req.body;
@@ -40,7 +39,7 @@ export const updateCartItem = asyncHandler(async (req: AuthRequest, res: Respons
   });
 });
 
-export const removeFromCart = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const removeFromCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { itemId } = req.params;
   
@@ -53,7 +52,7 @@ export const removeFromCart = asyncHandler(async (req: AuthRequest, res: Respons
   });
 });
 
-export const clearCart = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const clearCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   await clearUserCart(userId);
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { authApi } from '@/services/api';
 
@@ -21,9 +22,18 @@ export default function VerifyEmailPage() {
         await authApi.verifyEmail(token);
         setStatus('success');
         setMessage('Your email has been verified successfully!');
-      } catch (error: any) {
+      } catch (error: unknown) {
         setStatus('error');
-        setMessage(error.response?.data?.message || 'Failed to verify email');
+
+        if (axios.isAxiosError(error)) {
+          setMessage(
+            error.response?.data?.message || 'Failed to verify email'
+          );
+        } else if (error instanceof Error) {
+          setMessage(error.message);
+        } else {
+          setMessage('Failed to verify email');
+        }
       }
     };
 

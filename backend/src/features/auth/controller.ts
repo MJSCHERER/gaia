@@ -13,7 +13,6 @@ import {
   updateUserProfile,
   generateTokens,
 } from './service';
-import { AuthRequest } from '../../middleware/auth';
 import { asyncHandler } from '../../middleware/errorHandler';
 
 // Register
@@ -65,7 +64,7 @@ export const login = asyncHandler(
 
 // Logout
 export const logout = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
     
     if (refreshToken) {
@@ -171,7 +170,7 @@ export const resetPassword = asyncHandler(
 
 // Change password
 export const changePassword = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user!.id;
     
@@ -186,7 +185,7 @@ export const changePassword = asyncHandler(
 
 // Get current user
 export const getMe = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const userId = req.user!.id;
     
     const user = await getUserById(userId);
@@ -200,7 +199,7 @@ export const getMe = asyncHandler(
 
 // Update profile
 export const updateProfile = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const userId = req.user!.id;
     const updateData = req.body;
     

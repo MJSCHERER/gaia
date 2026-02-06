@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../middleware/errorHandler';
-import { AuthRequest } from '../../middleware/auth';
 import { getUserPurchases, getPurchase, generateDownloadLink } from './service';
 
-export const getPurchases = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPurchases = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const purchases = await getUserPurchases(userId);
 
@@ -13,7 +12,7 @@ export const getPurchases = asyncHandler(async (req: AuthRequest, res: Response)
   });
 });
 
-export const getPurchaseById = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPurchaseById = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { id } = req.params;
   
@@ -25,7 +24,7 @@ export const getPurchaseById = asyncHandler(async (req: AuthRequest, res: Respon
   });
 });
 
-export const getDownloadLink = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getDownloadLink = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { itemId } = req.params;
   

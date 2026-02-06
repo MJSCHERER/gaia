@@ -9,6 +9,7 @@ interface User {
   lastName: string;
   role: string;
   avatar?: string;
+  bio?: string;
 }
 
 interface AuthState {
@@ -206,7 +207,8 @@ export const useHiddenInteractionsStore = create<HiddenInteractionsState>()(
       markFound: (item) =>
         set((state) => {
           if (state.foundItems.includes(item)) return state;
-          const newState: any = {
+          const newState: HiddenInteractionsState = {
+            ...state,
             foundItems: [...state.foundItems, item],
           };
           if (item === 'ufo') newState.ufoFound = true;

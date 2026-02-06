@@ -18,7 +18,7 @@ export default function ProfilePage() {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
-    bio: (user as any)?.bio || '',
+    bio: user?.bio ?? '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +33,7 @@ export default function ProfilePage() {
       updateUser(response.data.data);
       toast.success('Profile updated successfully');
     } catch (error) {
+      console.error('Update profile failed:', error);
       toast.error('Failed to update profile');
     } finally {
       setIsLoading(false);

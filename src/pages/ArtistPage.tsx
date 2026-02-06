@@ -10,8 +10,38 @@ import {
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+type ArtistSocial = {
+  instagram: string;
+  twitter: string;
+  facebook: string;
+};
+
+type Artist = {
+  name: string;
+  bio: string;
+  specialty: string;
+  location: string;
+  website: string;
+  social: ArtistSocial;
+  artworks: number;
+  exhibitions: number;
+  publications: number;
+};
+
+type ArtworkPreview = {
+  id: number;
+  title: string;
+  price: number;
+};
+
+type Exhibition = {
+  year: string;
+  title: string;
+  venue: string;
+};
+
 // Mock artist data
-const mockArtists: Record<string, any> = {
+const mockArtists: Record<string, Artist> = {
   mel: {
     name: 'Mel',
     bio: 'Mel is a visionary artist whose work explores the ethereal boundaries between the natural world and the cosmic realm.',
@@ -44,14 +74,14 @@ const mockArtists: Record<string, any> = {
   },
 };
 
-const mockArtworks = [
+const mockArtworks: ArtworkPreview[] = [
   { id: 1, title: 'Cosmic Dreams', price: 450 },
   { id: 3, title: 'Nature\'s Whisper', price: 520 },
   { id: 5, title: 'Morning Light', price: 350 },
   { id: 7, title: 'Forest Magic', price: 550 },
 ];
 
-const exhibitions = [
+const exhibitions: Exhibition[] = [
   { year: '2023', title: 'Cosmic Visions', venue: 'Berlin Art Gallery' },
   { year: '2022', title: 'Nature\'s Dreams', venue: 'Munich Contemporary' },
   { year: '2021', title: 'Ethereal Light', venue: 'Hamburg Art Space' },

@@ -18,8 +18,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCartStore, useAuthStore } from '@/store';
 import { toast } from 'sonner';
 
+type Artwork = {
+  id: number;
+  title: string;
+  artist: string;
+  artistSlug: string;
+  price: number;
+  category: string;
+  description: string;
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  isDigital: boolean;
+  inStock: boolean;
+  rating: number;
+  reviews: number;
+};
+
 // Mock artwork data
-const mockArtworks: Record<string, any> = {
+const mockArtworks: Record<string, Artwork> = {
   '1': {
     id: 1,
     title: 'Cosmic Dreams',

@@ -59,6 +59,7 @@ export default function Navbar() {
       toast.success('Logged out successfully');
       navigate('/');
     } catch (error) {
+      console.error('Logout failed:', error);
       toast.error('Failed to logout');
     }
   };
