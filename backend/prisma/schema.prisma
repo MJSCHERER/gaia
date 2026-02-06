@@ -1,0 +1,393 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User roles enum
+enum UserRole {
+  GUEST
+  COLLECTOR
+  ARTIST
+  ADMIN
+}
+
+// User account status
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+// Artwork categories
+enum ArtworkCategory {
+  NATURE
+  PORTRAIT
+  ILLUSTRATION
+  FANTASY
+}
+
+// Purchase status
+enum PurchaseStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+// User model
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  password      String?       // Nullable for OAuth users
+  firstName     String
+  lastName      String
+  role          UserRole      @default(GUEST)
+  status        AccountStatus @default(PENDING)
+  emailVerified Boolean       @default(false)
+  avatar        String?
+  bio           String?
+  
+  // OAuth fields
+  googleId      String?       @unique
+  facebookId    String?       @unique
+  
+  // Security
+  twoFactorEnabled  Boolean   @default(false)
+  twoFactorSecret   String?
+  
+  // Timestamps
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastLoginAt   DateTime?
+  
+  // Relations
+  refreshTokens RefreshToken[]
+  purchases     Purchase[]
+  wishlists     Wishlist[]
+  reviews       Review[]
+  cartItems     CartItem[]
+  addresses     Address[]
+  
+  // Artist profile (if role is ARTIST)
+  artistProfile ArtistProfile?
+  
+  @@map("users")
+}
+
+// Refresh token for JWT
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@map("refresh_tokens")
+}
+
+// Artist profile
+model ArtistProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Artist info
+  artistName      String
+  slug            String   @unique
+  bio             String   @db.Text
+  statement       String?  @db.Text
+  
+  // Links
+  website         String?
+  instagram       String?
+  facebook        String?
+  twitter         String?
+  youtube         String?
+  
+  // CV/Resume
+  cvPdf           String?
+  portfolioPdf    String?
+  
+  // Payment info (for payouts)
+  stripeAccountId String?
+  paypalEmail     String?
+  
+  // Stats
+  totalSales      Int      @default(0)
+  totalRevenue    Decimal  @default(0) @db.Decimal(10, 2)
+  
+  // Relations
+  artworks        Artwork[]
+  exhibitions     Exhibition[]
+  publications    Publication[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("artist_profiles")
+}
+
+// Exhibition
+model Exhibition {
+  id          String        @id @default(uuid())
+  artistId    String
+  artist      ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  title       String
+  venue       String
+  location    String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?       @db.Text
+  link        String?
+  isSolo      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  
+  @@map("exhibitions")
+}
+
+// Publication/Press mention
+model Publication {
+  id          String        @id @default(uuid())
+  artistId    String
+  artist      ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  title       String
+  publisher   String
+  date        DateTime
+  link        String?
+  description String?       @db.Text
+  createdAt   DateTime      @default(now())
+  
+  @@map("publications")
+}
+
+// Artwork
+model Artwork {
+  id              String        @id @default(uuid())
+  artistId        String
+  artist          ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  // Basic info
+  title           String
+  slug            String        @unique
+  description     String?       @db.Text
+  category        ArtworkCategory
+  
+  // Images
+  thumbnail       String
+  images          String[]      // Array of image URLs
+  watermarkedImage String
+  
+  // Pricing
+  price           Decimal       @db.Decimal(10, 2)
+  currency        String        @default("EUR")
+  isAvailable     Boolean       @default(true)
+  isDigital       Boolean       @default(false) // Digital download vs physical
+  
+  // Dimensions (for physical artworks)
+  widthCm         Float?
+  heightCm        Float?
+  depthCm         Float?
+  weightKg        Float?
+  
+  // PDF description
+  descriptionPdf  String?
+  
+  // Stats
+  viewCount       Int           @default(0)
+  purchaseCount   Int           @default(0)
+  wishlistCount   Int           @default(0)
+  
+  // Relations
+  purchases       PurchaseItem[]
+  wishlists       Wishlist[]
+  reviews         Review[]
+  cartItems       CartItem[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("artworks")
+}
+
+// Purchase/Order
+model Purchase {
+  id              String          @id @default(uuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Order info
+  orderNumber     String          @unique
+  status          PurchaseStatus  @default(PENDING)
+  
+  // Pricing
+  subtotal        Decimal         @db.Decimal(10, 2)
+  taxAmount       Decimal         @db.Decimal(10, 2)
+  shippingAmount  Decimal         @db.Decimal(10, 2)
+  total           Decimal         @db.Decimal(10, 2)
+  currency        String          @default("EUR")
+  
+  // Payment
+  paymentMethod   String          // stripe, paypal
+  paymentIntentId String?         // Stripe payment intent ID
+  paypalOrderId   String?         // PayPal order ID
+  
+  // Shipping
+  shippingAddress Json?           // Stored as JSON
+  trackingNumber  String?
+  
+  // Download (for digital items)
+  downloadExpiry  DateTime?
+  
+  // Items
+  items           PurchaseItem[]
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@map("purchases")
+}
+
+// Purchase item (line item)
+model PurchaseItem {
+  id          String   @id @default(uuid())
+  purchaseId  String
+  purchase    Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  artworkId   String
+  artwork     Artwork  @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  
+  quantity    Int      @default(1)
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  totalPrice  Decimal  @db.Decimal(10, 2)
+  
+  // For digital downloads
+  downloadUrl String?
+  downloadCount Int    @default(0)
+  
+  createdAt   DateTime @default(now())
+  
+  @@map("purchase_items")
+}
+
+// Wishlist/Favorites
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artworkId String
+  artwork   Artwork  @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, artworkId])
+  @@map("wishlists")
+}
+
+// Cart item
+model CartItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artworkId String
+  artwork   Artwork  @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, artworkId])
+  @@map("cart_items")
+}
+
+// Review
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artworkId String
+  artwork   Artwork  @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  
+  rating    Int      // 1-5
+  comment   String?  @db.Text
+  isApproved Boolean @default(false) // Moderation
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("reviews")
+}
+
+// Address
+model Address {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  label     String   // e.g., "Home", "Work"
+  firstName String
+  lastName  String
+  street    String
+  city      String
+  state     String?
+  postalCode String
+  country   String
+  phone     String?
+  isDefault Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("addresses")
+}
+
+// Newsletter subscriber
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  language  String   @default("en")
+  isActive  Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  unsubscribedAt DateTime?
+  
+  @@map("newsletter_subscribers")
+}
+
+// Hidden interaction tracking
+model HiddenInteraction {
+  id          String   @id @default(uuid())
+  userId      String?
+  sessionId   String?
+  interactionType String // e.g., "ufo_click", "mushroom_click"
+  metadata    Json?    // Additional data
+  createdAt   DateTime @default(now())
+  
+  @@map("hidden_interactions")
+}
+
+// Email verification token
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@map("email_verification_tokens")
+}
+
+// Password reset token
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@map("password_reset_tokens")
+}

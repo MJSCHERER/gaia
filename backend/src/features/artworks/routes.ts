@@ -1,0 +1,21 @@
+import { Router } from 'express';
+import {
+  getAllArtworks,
+  getArtworkBySlug,
+  createArtwork,
+  updateArtwork,
+  deleteArtwork,
+  incrementViewCount,
+} from './controller';
+import { authenticate, authorize } from '../../middleware/auth';
+
+const router = Router();
+
+router.get('/', getAllArtworks);
+router.get('/:slug', getArtworkBySlug);
+router.post('/:slug/view', incrementViewCount);
+router.post('/', authenticate, authorize('ARTIST', 'ADMIN'), createArtwork);
+router.patch('/:id', authenticate, authorize('ARTIST', 'ADMIN'), updateArtwork);
+router.delete('/:id', authenticate, authorize('ARTIST', 'ADMIN'), deleteArtwork);
+
+export default router;
