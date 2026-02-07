@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gaiamundi API Endpoint Security Map</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #333; color: #fff; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    .auth-yes { color: green; font-weight: bold; }
+    .auth-no { color: red; font-weight: bold; }
+    .auth-optional { color: orange; font-weight: bold; }
+    .rbac { font-weight: bold; color: #007bff; }
+    .nowrap { white-space: nowrap; }
+    .scrollable { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Gaiamundi API Endpoint Security Map</h1>
+  <div class="scrollable">
+  <table>
+    <thead>
+      <tr>
+        <th>Module / Endpoint</th>
+        <th>HTTP</th>
+        <th>Auth</th>
+        <th>RBAC</th>
+        <th>Controller Check / Sicherheit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="4"><b>Users</b></td><td>GET /users</td><td class="auth-yes">✅</td><td class="rbac">Admin only</td><td>Nur Admin kann alle Users sehen</td></tr>
+      <tr><td>GET /users/:id</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigener User oder Admin kann Daten sehen</td></tr>
+      <tr><td>PATCH /users/:id</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigener User oder Admin kann ändern</td></tr>
+      <tr><td>DELETE /users/:id</td><td class="auth-yes">✅</td><td class="rbac">Admin only</td><td>Nur Admin kann löschen</td></tr>
+
+      <tr><td rowspan="3"><b>Wishlist</b></td><td>GET /wishlists</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Wishlist (`req.user.id`)</td></tr>
+      <tr><td>POST /wishlists</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Wishlist (`req.user.id`)</td></tr>
+      <tr><td>DELETE /wishlists/:artworkId</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Wishlist (`req.user.id`)</td></tr>
+
+      <tr><td rowspan="3"><b>Purchases</b></td><td>GET /purchases</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Käufe (`req.user.id`)</td></tr>
+      <tr><td>GET /purchases/:id</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Käufe</td></tr>
+      <tr><td>GET /purchases/:itemId/download</td><td class="auth-yes">✅</td><td>—</td><td>Nur eigene Käufe + Digital + Ablaufzeit</td></tr>
+
+      <tr><td rowspan="4"><b>Payments</b></td><td>POST /payments/create-intent</td><td class="auth-yes">✅</td><td>—</td><td>PaymentIntent metadata userId match</td></tr>
+      <tr><td>POST /payments/confirm</td><td class="auth-yes">✅</td><td>—</td><td>PaymentIntent Status prüfen; UserId über Metadata</td></tr>
+      <tr><td>GET /payments/methods</td><td class="auth-yes">✅</td><td>—</td><td>Nur Auth</td></tr>
+      <tr><td>POST /payments/webhook</td><td class="auth-no">❌</td><td>—</td><td>Stripe-Signatur prüfen, UserId match</td></tr>
+
+      <tr><td rowspan="3"><b>Subscriptions</b></td><td>POST /subscribe</td><td class="auth-no">❌</td><td>—</td><td>Public subscription</td></tr>
+      <tr><td>POST /unsubscribe</td><td class="auth-no">❌</td><td>—</td><td>Public unsubscribe</td></tr>
+      <tr><td>GET /subscribers</td><td class="auth-yes">✅</td><td class="rbac">Admin only</td><td>Nur Admin darf alle Subscriber sehen</td></tr>
+
+      <tr><td rowspan="2"><b>Interactions</b></td><td>POST /interactions</td><td class="auth-optional">optional</td><td>—</td><td>Optional Auth, anonym möglich</td></tr>
+      <tr><td>GET /interactions</td><td class="auth-yes">✅</td><td>—</td><td>Auth required, Admin/Controller entscheidet</td></tr>
+
+      <tr><td rowspan="3"><b>Gallery</b></td><td>GET /gallery</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /gallery/featured</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /gallery/artists-preview</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+
+      <tr><td rowspan="6"><b>Artworks</b></td><td>GET /artworks</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /artworks/:slug</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>POST /artworks/:slug/view</td><td class="auth-no">❌</td><td>—</td><td>Increment View Count, public</td></tr>
+      <tr><td>POST /artworks</td><td class="auth-yes">✅</td><td class="rbac">ARTIST / ADMIN</td><td>Auth & Role check</td></tr>
+      <tr><td>PATCH /artworks/:id</td><td class="auth-yes">✅</td><td class="rbac">ARTIST / ADMIN</td><td>Auth & Role check</td></tr>
+      <tr><td>DELETE /artworks/:id</td><td class="auth-yes">✅</td><td class="rbac">ARTIST / ADMIN</td><td>Auth & Role check</td></tr>
+
+      <tr><td rowspan="7"><b>Artists</b></td><td>GET /artists</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /artists/:slug</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /artists/:slug/artworks</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /artists/:slug/exhibitions</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>GET /artists/:slug/publications</td><td class="auth-no">❌</td><td>—</td><td>Public</td></tr>
+      <tr><td>POST /artists</td><td class="auth-yes">✅</td><td class="rbac">ARTIST / ADMIN</td><td>Auth & Role check</td></tr>
+      <tr><td>PATCH /artists/:id</td><td class="auth-yes">✅</td><td class="rbac">ARTIST / ADMIN</td><td>Auth & Role check</td></tr>
+    </tbody>
+  </table>
+  </div>
+</body>
+</html>

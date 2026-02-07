@@ -70,7 +70,7 @@ export default function Navbar() {
     i18n.changeLanguage(langCode);
     setLanguage(langCode);
   };
-  
+
   useEffect(() => {
     if (!theme) {
       setTheme('light');

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getReviews, createReview, approveReview, deleteReview } from './controller';
 import { authenticate, authorize } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/artwork/:artworkId', getReviews);
 router.post('/', authenticate, createReview);

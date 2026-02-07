@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getPurchases, getPurchaseById, getDownloadLink } from './controller';
 import { authenticate } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 router.use(authenticate);
 

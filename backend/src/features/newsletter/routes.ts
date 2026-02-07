@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { subscribe, unsubscribe, getSubscribers } from './controller';
 import { authenticate, authorize } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 router.post('/subscribe', subscribe);
 router.post('/unsubscribe', unsubscribe);

@@ -24,8 +24,8 @@ function flattenKeys(obj: Translations, prefix = ''): string[] {
 const localesPath = path.resolve(__dirname, '../src/i18n/locales');
 const translations: Record<string, string[]> = {};
 fs.readdirSync(localesPath)
-  .filter(f => f.endsWith('.json'))
-  .forEach(file => {
+  .filter((f) => f.endsWith('.json'))
+  .forEach((file) => {
     const lang = path.basename(file, '.json');
     const data = JSON.parse(fs.readFileSync(path.join(localesPath, file), 'utf-8'));
     translations[lang] = flattenKeys(data);
@@ -47,7 +47,7 @@ collectFiles(srcPath);
 const usedKeys = new Set<string>();
 const keyRegex = /t\(\s*['"`]([\w\d.-]+)['"`]\s*\)/g;
 
-tsxFiles.forEach(file => {
+tsxFiles.forEach((file) => {
   const content = fs.readFileSync(file, 'utf-8');
   let match;
   while ((match = keyRegex.exec(content)) !== null) {
@@ -57,7 +57,7 @@ tsxFiles.forEach(file => {
 
 // === Check missing keys per language ===
 Object.entries(translations).forEach(([lang, keys]) => {
-  const missing = [...usedKeys].filter(k => !keys.includes(k));
+  const missing = [...usedKeys].filter((k) => !keys.includes(k));
   if (missing.length) {
     console.log(`\n❌ Missing translations in "${lang}":\n`, missing.join('\n'));
   } else {
@@ -67,7 +67,7 @@ Object.entries(translations).forEach(([lang, keys]) => {
 
 // === Extra: warn about unused keys in JSONs ===
 Object.entries(translations).forEach(([lang, keys]) => {
-  const unused = keys.filter(k => !usedKeys.has(k));
+  const unused = keys.filter((k) => !usedKeys.has(k));
   if (unused.length) {
     console.log(`\n⚠️ Unused keys in "${lang}":\n`, unused.join('\n'));
   }

@@ -10,7 +10,7 @@ import {
 } from './controller';
 import { authenticate, authorize } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 // Public routes
 router.get('/', getAllArtists);

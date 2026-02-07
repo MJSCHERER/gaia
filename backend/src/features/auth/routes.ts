@@ -19,7 +19,7 @@ import {
 import { authenticate } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 
-const router = Router();
+const router: Router = Router();
 
 // Validation rules
 const registerValidation = [

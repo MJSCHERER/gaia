@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getCart, addToCart, updateCartItem, removeFromCart, clearCart } from './controller';
 import { authenticate } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 router.use(authenticate);
 

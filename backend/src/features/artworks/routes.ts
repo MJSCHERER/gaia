@@ -9,7 +9,7 @@ import {
 } from './controller';
 import { authenticate, authorize } from '../../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', getAllArtworks);
 router.get('/:slug', getArtworkBySlug);
