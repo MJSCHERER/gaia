@@ -27,6 +27,9 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const isHome = location.pathname === '/';
+  const isLightNavbar = isHome && !isScrolled;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { user, isAuthenticated, clearAuth } = useAuthStore();
@@ -36,20 +39,26 @@ export default function Navbar() {
   const cartItemCount = getTotalItems();
 
   const navTextClass = (path: string) => {
-    if (!isScrolled) {
-      return `text-white/90 hover:text-white ${isActive(path) ? 'text-white' : ''}`;
+    if (isLightNavbar) {
+      return `text-white/90 hover:text-white ${
+        isActive(path) ? 'text-white' : ''
+      }`;
     }
 
-    return isActive(path) ? 'text-violet-600' : 'text-foreground/80 hover:text-violet-600';
+    return isActive(path)
+      ? 'text-violet-600'
+      : 'text-foreground/80 hover:text-violet-600';
   };
 
   useEffect(() => {
+    if (!isHome) return;
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHome]);
 
   const handleLogout = async () => {
     try {
@@ -104,11 +113,14 @@ export default function Navbar() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}
-    >
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isLightNavbar
+            ? 'bg-transparent'
+            : 'bg-background/95 backdrop-blur-md shadow-sm'
+        }`}
+      >
+
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -121,23 +133,21 @@ export default function Navbar() {
 
             <div className="hidden sm:flex flex-col leading-tight">
               <span
-                className={`
-                  text-xl font-bold tracking-tight transition-colors
-                  ${
-                    !isScrolled
-                      ? 'text-white group-hover:text-white'
-                      : 'text-foreground/90 group-hover:text-violet-600'
-                  }
-                `}
+                className={`text-xl font-bold tracking-tight transition-colors ${
+                  isLightNavbar
+                    ? 'text-white'
+                    : 'text-foreground/90 group-hover:text-violet-600'
+                }`}
               >
                 Gaiamundi
               </span>
 
               <span
-                className={`
-                  text-[11px] tracking-widest uppercase transition-colors
-                  ${!isScrolled ? 'text-white/70' : 'text-muted-foreground/70'}
-                `}
+                className={`text-[11px] tracking-widest uppercase transition-colors ${
+                  isLightNavbar
+                    ? 'text-white/70'
+                    : 'text-muted-foreground/70'
+                }`}
               >
                 Non-AI Art
               </span>
@@ -158,7 +168,7 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className={`flex items-center gap-2 ${!isScrolled ? 'text-white' : ''}`}>
+          <div className={`flex items-center gap-2 ${isLightNavbar ? 'text-white' : ''}`}>
             {/* Theme toggle */}
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
