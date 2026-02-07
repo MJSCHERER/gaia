@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => {
       terserOptions: { compress: { drop_console: true, drop_debugger: true } },
     },
     optimizeDeps: { include: ['react', 'react-dom', 'react-router-dom'] },
-    server: { port: 4173, strictPort: true, open: true },
-    preview: { port: 4174, strictPort: true },
+    server: { port: 5173, strictPort: true, open: true },
+    preview: { port: 5174, strictPort: true },
   };
 });

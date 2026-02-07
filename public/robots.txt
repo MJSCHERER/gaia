@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gaiamundi.com/sitemap.xml
+Host: gaiamundi.com

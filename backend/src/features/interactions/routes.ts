@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { trackInteraction, getInteractions } from './controller';
-import { authenticate, optionalAuth } from '../../middleware/auth';
+import { trackInteraction, getInteractions } from './controller.js';
+import { authenticate, optionalAuth } from '../../middleware/auth.js';
 
 const router: Router = Router();
 

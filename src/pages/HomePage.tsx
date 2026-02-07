@@ -30,24 +30,24 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* 🚀 SEO HEAD */}
       <Helmet>
-        <title>Gaiamundi - Wo Kunst auf den Kosmos trifft</title>
+        <title>Gaiamundi - Non-AI Art</title>
         <meta
           name="description"
-          content="Entdecke einzigartige Kunstwerke visionärer Künstler auf Gaiamundi. Tauche ein in die Welt digitaler Kunst und Inspiration."
+          content="Discover unique artworks by visionary artists on Gaiamundi. Dive into the world of digital art and inspiration."
         />
-        <meta property="og:title" content="Gaiamundi - Wo Kunst auf den Kosmos trifft" />
+        <meta property="og:title" content="Gaiamundi - Non-AI Art" />
         <meta
           property="og:description"
-          content="Entdecke einzigartige Kunstwerke visionärer Künstler auf Gaiamundi."
+          content="Discover unique artworks by visionary artists on Gaiamundi."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.gaiamundi.com" />
         <meta property="og:image" content="https://www.gaiamundi.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Gaiamundi - Wo Kunst auf den Kosmos trifft" />
+        <meta name="twitter:title" content="Gaiamundi - Non-AI Art" />
         <meta
           name="twitter:description"
-          content="Entdecke einzigartige Kunstwerke visionärer Künstler auf Gaiamundi."
+          content="Discover unique artworks by visionary artists on Gaiamundi."
         />
         <meta name="twitter:image" content="https://www.gaiamundi.com/twitter-card.jpg" />
         <link rel="canonical" href="https://www.gaiamundi.com" />

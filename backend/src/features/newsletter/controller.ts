@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { addSubscriber, removeSubscriber, getAllSubscribers } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { addSubscriber, removeSubscriber, getAllSubscribers } from './service.js';
 
 export const subscribe = asyncHandler(async (req: Request, res: Response) => {
   const { email, firstName, lastName, language } = req.body;

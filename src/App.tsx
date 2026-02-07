@@ -36,7 +36,7 @@ const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 const Devtools = lazy(() =>
-  import('@tanstack/react-query-devtools').then((mod) => ({ default: mod.ReactQueryDevtools }))
+  import('@tanstack/react-query-devtools').then((mod) => ({ default: mod.ReactQueryDevtools })),
 );
 
 // Create Query Client

@@ -102,7 +102,7 @@ Key variables include:
 ```env
 PORT=5000
 NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:4173
 
 DATABASE_URL=postgresql://username:password@localhost:5432/gaiamundi?schema=public
 

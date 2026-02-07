@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getGalleryData, getFeaturedArtworks, getArtistsPreview } from './controller';
+import { getGalleryData, getFeaturedArtworks, getArtistsPreview } from './controller.js';
 
 const router: Router = Router();
 

@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getArtworkReviews, createNewReview, approveReviewById, deleteReviewById } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import {
+  getArtworkReviews,
+  createNewReview,
+  approveReviewById,
+  deleteReviewById,
+} from './service.js';
 
 export const getReviews = asyncHandler(async (req: Request, res: Response) => {
   const { artworkId } = req.params;

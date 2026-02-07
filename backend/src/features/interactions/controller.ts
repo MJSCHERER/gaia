@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { trackUserInteraction, getAllInteractions } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { trackUserInteraction, getAllInteractions } from './service.js';
 
 export const trackInteraction = asyncHandler(async (req: Request, res: Response) => {
   const { interactionType, metadata, sessionId } = req.body;

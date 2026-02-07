@@ -15,9 +15,9 @@ import {
   updateProfile,
   googleCallback,
   facebookCallback,
-} from './controller';
-import { authenticate } from '../../middleware/auth';
-import { validate } from '../../middleware/validate';
+} from './controller.js';
+import { authenticate } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
 
 const router: Router = Router();
 

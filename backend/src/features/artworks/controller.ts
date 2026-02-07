@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
+import { asyncHandler } from '../../middleware/errorHandler.js';
 import {
   getArtworks,
   getArtwork,
@@ -7,7 +7,7 @@ import {
   updateArtworkById,
   deleteArtworkById,
   incrementViews,
-} from './service';
+} from './service.js';
 
 export const getAllArtworks = asyncHandler(async (req: Request, res: Response) => {
   const { category, artist, search, page = '1', limit = '20' } = req.query;

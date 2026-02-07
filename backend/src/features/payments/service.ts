@@ -1,8 +1,8 @@
 import Stripe from 'stripe';
 import { PrismaClient, Address } from '@prisma/client';
-import { createError } from '../../middleware/errorHandler';
-import { sendEmail } from '../../services/email';
-import { logger } from '../../utils/logger';
+import { createError } from '../../middleware/errorHandler.js';
+import { sendEmail } from '../../services/email.js';
+import { logger } from '../../utils/logger.js';
 
 const prisma = new PrismaClient();
 

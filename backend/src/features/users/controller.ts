@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getAllUsers, getUserById, updateUserById, deleteUserById } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { getAllUsers, getUserById, updateUserById, deleteUserById } from './service.js';
 
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await getAllUsers();

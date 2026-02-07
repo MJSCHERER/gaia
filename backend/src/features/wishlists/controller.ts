@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getUserWishlist, addItem, removeItem } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { getUserWishlist, addItem, removeItem } from './service.js';
 
 export const getWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;

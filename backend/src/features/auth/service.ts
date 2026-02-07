@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken';
 import type { SignOptions } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
-import { createError } from '../../middleware/errorHandler';
-import { sendEmail } from '../../services/email';
+import { createError } from '../../middleware/errorHandler.js';
+import { sendEmail } from '../../services/email.js';
 // import { logger } from '../../utils/logger';
 
 const prisma = new PrismaClient();

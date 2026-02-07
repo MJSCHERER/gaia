@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getUserCart, addItemToCart, updateItem, removeItem, clearUserCart } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { getUserCart, addItemToCart, updateItem, removeItem, clearUserCart } from './service.js';
 
 export const getCart = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;

@@ -1,6 +1,6 @@
 // backend/src/services/email.ts
 import nodemailer from 'nodemailer';
-import { logger } from '../utils/logger';
+import { logger } from '../utils/logger.js';
 
 type EmailTemplateName =
   | 'email-verification'

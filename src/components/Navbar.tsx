@@ -1,18 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Palette,
-  Menu,
-  X,
-  ShoppingCart,
-  Heart,
-  User,
-  LogOut,
-  Globe,
-  Sun,
-  Moon,
-} from 'lucide-react';
+import { Menu, X, ShoppingCart, Heart, User, LogOut, Globe, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -45,6 +34,14 @@ export default function Navbar() {
   const { theme, setTheme, setLanguage } = useUIStore();
 
   const cartItemCount = getTotalItems();
+
+  const navTextClass = (path: string) => {
+    if (!isScrolled) {
+      return `text-white/90 hover:text-white ${isActive(path) ? 'text-white' : ''}`;
+    }
+
+    return isActive(path) ? 'text-violet-600' : 'text-foreground/80 hover:text-violet-600';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,11 +112,36 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <Palette className="w-8 h-8 text-violet-600 transition-transform group-hover:rotate-12" />
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
-              Gaiamundi
-            </span>
+          <Link to="/" className="group flex items-center gap-3">
+            <img
+              src="/gaiamundi-logo.png"
+              alt="Gaiamundi"
+              className="w-9 h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+
+            <div className="hidden sm:flex flex-col leading-tight">
+              <span
+                className={`
+                  text-xl font-bold tracking-tight transition-colors
+                  ${
+                    !isScrolled
+                      ? 'text-white group-hover:text-white'
+                      : 'text-foreground/90 group-hover:text-violet-600'
+                  }
+                `}
+              >
+                Gaiamundi
+              </span>
+
+              <span
+                className={`
+                  text-[11px] tracking-widest uppercase transition-colors
+                  ${!isScrolled ? 'text-white/70' : 'text-muted-foreground/70'}
+                `}
+              >
+                Non-AI Art
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -128,9 +150,7 @@ export default function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`text-sm font-medium transition-colors hover:text-violet-600 ${
-                  isActive(link.to) ? 'text-violet-600' : 'text-foreground/80'
-                }`}
+                className={`text-sm font-medium transition-colors ${navTextClass(link.to)}`}
               >
                 {link.label}
               </Link>
@@ -138,7 +158,7 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${!isScrolled ? 'text-white' : ''}`}>
             {/* Theme toggle */}
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}

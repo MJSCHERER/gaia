@@ -12,8 +12,8 @@ import {
   getUserById,
   updateUserProfile,
   generateTokens,
-} from './service';
-import { asyncHandler } from '../../middleware/errorHandler';
+} from './service.js';
+import { asyncHandler } from '../../middleware/errorHandler.js';
 
 export type UserRole = 'GUEST' | 'COLLECTOR' | 'ARTIST' | 'ADMIN';
 

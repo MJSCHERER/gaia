@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getGalleryArtworks, getFeatured, getArtistsForPreview } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { getGalleryArtworks, getFeatured, getArtistsForPreview } from './service.js';
 
 export const getGalleryData = asyncHandler(async (req: Request, res: Response) => {
   const { artist, category, page = '1', limit = '20', sort = 'newest' } = req.query;

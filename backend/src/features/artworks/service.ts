@@ -1,7 +1,7 @@
 // ./backend/src/features/artworks/service.ts
 
 import { PrismaClient, Prisma, ArtworkCategory } from '@prisma/client';
-import { createError } from '../../middleware/errorHandler';
+import { createError } from '../../middleware/errorHandler.js';
 
 const prisma = new PrismaClient();
 

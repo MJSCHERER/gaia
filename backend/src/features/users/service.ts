@@ -1,5 +1,5 @@
 import { PrismaClient, UserRole, AccountStatus } from '@prisma/client';
-import { createError } from '../../middleware/errorHandler';
+import { createError } from '../../middleware/errorHandler.js';
 
 interface UpdateUserData {
   firstName?: string;

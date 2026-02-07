@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { getUserPurchases, getPurchase, generateDownloadLink } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { getUserPurchases, getPurchase, generateDownloadLink } from './service.js';
 
 export const getPurchases = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;

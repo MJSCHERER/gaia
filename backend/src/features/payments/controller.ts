@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
-import { createIntent, confirmPaymentIntent, handleWebhook } from './service';
+import { asyncHandler } from '../../middleware/errorHandler.js';
+import { createIntent, confirmPaymentIntent, handleWebhook } from './service.js';
 
 export const createPaymentIntent = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;

@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { sendEmail } from '../../services/email';
-import { logger } from '../../utils/logger';
+import { sendEmail } from '../../services/email.js';
+import { logger } from '../../utils/logger.js';
 
 const prisma = new PrismaClient();
 

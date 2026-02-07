@@ -8,23 +8,23 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import passport from 'passport';
 
-import { errorHandler } from './middleware/errorHandler';
-import { requestLogger } from './middleware/requestLogger';
-import { setupPassport } from './config/passport';
+import { errorHandler } from './middleware/errorHandler.js';
+import { requestLogger } from './middleware/requestLogger.js';
+import { setupPassport } from './config/passport.js';
 
 // Import routes
-import authRoutes from './features/auth/routes';
-import userRoutes from './features/users/routes';
-import artistRoutes from './features/artists/routes';
-import artworkRoutes from './features/artworks/routes';
-import galleryRoutes from './features/gallery/routes';
-import cartRoutes from './features/cart/routes';
-import purchaseRoutes from './features/purchases/routes';
-import wishlistRoutes from './features/wishlists/routes';
-import reviewRoutes from './features/reviews/routes';
-import newsletterRoutes from './features/newsletter/routes';
-import interactionRoutes from './features/interactions/routes';
-import paymentRoutes from './features/payments/routes';
+import authRoutes from './features/auth/routes.js';
+import userRoutes from './features/users/routes.js';
+import artistRoutes from './features/artists/routes.js';
+import artworkRoutes from './features/artworks/routes.js';
+import galleryRoutes from './features/gallery/routes.js';
+import cartRoutes from './features/cart/routes.js';
+import purchaseRoutes from './features/purchases/routes.js';
+import wishlistRoutes from './features/wishlists/routes.js';
+import reviewRoutes from './features/reviews/routes.js';
+import newsletterRoutes from './features/newsletter/routes.js';
+import interactionRoutes from './features/interactions/routes.js';
+import paymentRoutes from './features/payments/routes.js';
 
 dotenv.config();
 

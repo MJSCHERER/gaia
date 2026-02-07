@@ -6,8 +6,8 @@ import {
   updateArtwork,
   deleteArtwork,
   incrementViewCount,
-} from './controller';
-import { authenticate, authorize } from '../../middleware/auth';
+} from './controller.js';
+import { authenticate, authorize } from '../../middleware/auth.js';
 
 const router: Router = Router();
 

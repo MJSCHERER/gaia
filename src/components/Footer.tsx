@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Palette, Instagram, Facebook, Twitter, Youtube, Send } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Youtube, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { newsletterApi } from '@/services/api';
@@ -54,14 +54,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <Palette className="w-8 h-8 text-violet-600" />
-              <span className="text-xl font-bold">Gaiamundi</span>
+          <div className="lg:col-span-2 flex flex-col items-start">
+            <Link to="/" className="group flex flex-col items-center gap-2 mb-4">
+              <img
+                src="/gaiamundi-logo.png"
+                alt="Gaiamundi"
+                className="w-40 h-40 object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+
+              <span className="text-[12px] tracking-widest uppercase text-muted-foreground/70">
+                Non-AI Art
+              </span>
             </Link>
-              <p className="text-sm text-muted-foreground mb-6 max-w-xs uppercase">
-                NOT AI GENERATED ART
-              </p>
+
             {/* Social links */}
             <div className="flex gap-4">
               <a

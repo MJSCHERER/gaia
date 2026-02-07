@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/errorHandler';
+import { asyncHandler } from '../../middleware/errorHandler.js';
 import {
   getArtists,
   getArtist,
@@ -8,7 +8,7 @@ import {
   getPublications,
   createArtist,
   updateArtist,
-} from './service';
+} from './service.js';
 
 export const getAllArtists = asyncHandler(async (req: Request, res: Response) => {
   const artists = await getArtists();
