@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 import { Toaster } from '@/components/ui/sonner';
 
 // Import i18n
@@ -34,6 +34,10 @@ const WishlistPage = lazy(() => import('@/pages/account/WishlistPage'));
 const CartPage = lazy(() => import('@/pages/CartPage'));
 const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
+
+const Devtools = lazy(() =>
+  import('@tanstack/react-query-devtools').then((mod) => ({ default: mod.ReactQueryDevtools }))
+);
 
 // Create Query Client
 const queryClient = new QueryClient({
@@ -100,7 +104,11 @@ function App() {
         </Router>
       </ErrorBoundary>
       <Toaster position="top-right" richColors />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {import.meta.env.MODE === 'development' && (
+        <Suspense fallback={null}>
+          <Devtools initialIsOpen={false} />
+        </Suspense>
+      )}
     </QueryClientProvider>
   );
 }

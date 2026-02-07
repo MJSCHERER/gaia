@@ -59,10 +59,9 @@ export default function Footer() {
               <Palette className="w-8 h-8 text-violet-600" />
               <span className="text-xl font-bold">Gaiamundi</span>
             </Link>
-            <p className="text-muted-foreground mb-6 max-w-sm">
-              Where art meets the cosmos. Discover unique artworks from visionary artists around the
-              world.
-            </p>
+              <p className="text-sm text-muted-foreground mb-6 max-w-xs uppercase">
+                NOT AI GENERATED ART
+              </p>
             {/* Social links */}
             <div className="flex gap-4">
               <a

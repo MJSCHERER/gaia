@@ -155,7 +155,9 @@ export default function GalleryPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
+            {/* 
             <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t('gallery.title')}</h1>
+            */}
 
             {/* Search and Controls */}
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
