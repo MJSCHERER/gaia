@@ -1,10 +1,29 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { createError } from '../../middleware/errorHandler';
 
 const prisma = new PrismaClient();
 
+// --- Input DTOs (typed, no any) ---
+export interface CreateArtistData {
+  artistName: string;
+  slug?: string;
+  bio: string;
+  statement?: string;
+  website?: string;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
+  youtube?: string;
+}
+
+export interface UpdateArtistData extends Partial<CreateArtistData> {
+  cvPdf?: string;
+  portfolioPdf?: string;
+}
+
+// --- Get all artists ---
 export const getArtists = async () => {
-  const artists = await prisma.artistProfile.findMany({
+  return await prisma.artistProfile.findMany({
     select: {
       id: true,
       artistName: true,
@@ -16,22 +35,13 @@ export const getArtists = async () => {
       facebook: true,
       twitter: true,
       youtube: true,
-      user: {
-        select: {
-          avatar: true,
-        },
-      },
-      _count: {
-        select: {
-          artworks: true,
-        },
-      },
+      user: { select: { avatar: true } },
+      _count: { select: { artworks: true } },
     },
   });
-
-  return artists;
 };
 
+// --- Get single artist by slug ---
 export const getArtist = async (slug: string) => {
   const artist = await prisma.artistProfile.findUnique({
     where: { slug },
@@ -50,52 +60,26 @@ export const getArtist = async (slug: string) => {
       portfolioPdf: true,
       totalSales: true,
       totalRevenue: true,
-      user: {
-        select: {
-          avatar: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
-      _count: {
-        select: {
-          artworks: true,
-          exhibitions: true,
-          publications: true,
-        },
-      },
+      user: { select: { avatar: true, firstName: true, lastName: true } },
+      _count: { select: { artworks: true, exhibitions: true, publications: true } },
     },
   });
 
-  if (!artist) {
-    throw createError('Artist not found', 404);
-  }
-
+  if (!artist) throw createError('Artist not found', 404);
   return artist;
 };
 
-export const getArtistWorks = async (
-  slug: string,
-  options: { page: number; limit: number }
-) => {
+// --- Get artist artworks with pagination ---
+export const getArtistWorks = async (slug: string, options: { page: number; limit: number }) => {
   const { page, limit } = options;
   const skip = (page - 1) * limit;
 
-  const artist = await prisma.artistProfile.findUnique({
-    where: { slug },
-    select: { id: true },
-  });
-
-  if (!artist) {
-    throw createError('Artist not found', 404);
-  }
+  const artist = await prisma.artistProfile.findUnique({ where: { slug }, select: { id: true } });
+  if (!artist) throw createError('Artist not found', 404);
 
   const [artworks, total] = await Promise.all([
     prisma.artwork.findMany({
-      where: {
-        artistId: artist.id,
-        isAvailable: true,
-      },
+      where: { artistId: artist.id, isAvailable: true },
       orderBy: { createdAt: 'desc' },
       skip,
       take: limit,
@@ -116,12 +100,7 @@ export const getArtistWorks = async (
         createdAt: true,
       },
     }),
-    prisma.artwork.count({
-      where: {
-        artistId: artist.id,
-        isAvailable: true,
-      },
-    }),
+    prisma.artwork.count({ where: { artistId: artist.id, isAvailable: true } }),
   ]);
 
   return {
@@ -136,17 +115,12 @@ export const getArtistWorks = async (
   };
 };
 
+// --- Get exhibitions for artist ---
 export const getExhibitions = async (slug: string) => {
-  const artist = await prisma.artistProfile.findUnique({
-    where: { slug },
-    select: { id: true },
-  });
+  const artist = await prisma.artistProfile.findUnique({ where: { slug }, select: { id: true } });
+  if (!artist) throw createError('Artist not found', 404);
 
-  if (!artist) {
-    throw createError('Artist not found', 404);
-  }
-
-  const exhibitions = await prisma.exhibition.findMany({
+  return await prisma.exhibition.findMany({
     where: { artistId: artist.id },
     orderBy: { startDate: 'desc' },
     select: {
@@ -161,21 +135,14 @@ export const getExhibitions = async (slug: string) => {
       isSolo: true,
     },
   });
-
-  return exhibitions;
 };
 
+// --- Get publications for artist ---
 export const getPublications = async (slug: string) => {
-  const artist = await prisma.artistProfile.findUnique({
-    where: { slug },
-    select: { id: true },
-  });
+  const artist = await prisma.artistProfile.findUnique({ where: { slug }, select: { id: true } });
+  if (!artist) throw createError('Artist not found', 404);
 
-  if (!artist) {
-    throw createError('Artist not found', 404);
-  }
-
-  const publications = await prisma.publication.findMany({
+  return await prisma.publication.findMany({
     where: { artistId: artist.id },
     orderBy: { date: 'desc' },
     select: {
@@ -187,77 +154,54 @@ export const getPublications = async (slug: string) => {
       description: true,
     },
   });
-
-  return publications;
 };
 
-export const createArtist = async (userId: string, data: any) => {
-  // Check if user already has an artist profile
-  const existingProfile = await prisma.artistProfile.findUnique({
-    where: { userId },
-  });
-
-  if (existingProfile) {
-    throw createError('Artist profile already exists', 409);
-  }
+// --- Create artist (typed input) ---
+export const createArtist = async (userId: string, data: CreateArtistData) => {
+  const existingProfile = await prisma.artistProfile.findUnique({ where: { userId } });
+  if (existingProfile) throw createError('Artist profile already exists', 409);
 
   // Update user role to ARTIST
-  await prisma.user.update({
-    where: { id: userId },
-    data: { role: 'ARTIST' },
-  });
+  await prisma.user.update({ where: { id: userId }, data: { role: 'ARTIST' } });
 
-  // Create artist profile
-  const artist = await prisma.artistProfile.create({
-    data: {
-      userId,
-      artistName: data.artistName,
-      slug: data.slug || data.artistName.toLowerCase().replace(/\s+/g, '-'),
-      bio: data.bio,
-      statement: data.statement,
-      website: data.website,
-      instagram: data.instagram,
-      facebook: data.facebook,
-      twitter: data.twitter,
-      youtube: data.youtube,
-    },
-  });
+  // Build Prisma-compatible payload
+  const payload: Prisma.ArtistProfileCreateInput = {
+    user: { connect: { id: userId } },
+    artistName: data.artistName,
+    slug: data.slug ?? data.artistName.toLowerCase().replace(/\s+/g, '-'),
+    bio: data.bio, // immer vorhanden
+    statement: data.statement,
+    website: data.website,
+    instagram: data.instagram,
+    facebook: data.facebook,
+    twitter: data.twitter,
+    youtube: data.youtube,
+  };
 
-  return artist;
+  return await prisma.artistProfile.create({ data: payload });
 };
 
-export const updateArtist = async (
-  artistId: string,
-  userId: string,
-  data: any
-) => {
-  // Check ownership
-  const artist = await prisma.artistProfile.findFirst({
-    where: {
-      id: artistId,
-      userId,
-    },
-  });
+// --- Update artist (typed input) ---
+export const updateArtist = async (artistId: string, userId: string, data: UpdateArtistData) => {
+  const artist = await prisma.artistProfile.findFirst({ where: { id: artistId, userId } });
+  if (!artist) throw createError('Artist profile not found or unauthorized', 404);
 
-  if (!artist) {
-    throw createError('Artist profile not found or unauthorized', 404);
-  }
+  // Only set fields that are provided (avoid setting undefined explicitly)
+  const updatePayload: Record<string, unknown> = {};
+  if (data.artistName !== undefined) updatePayload.artistName = data.artistName;
+  if (data.slug !== undefined) updatePayload.slug = data.slug;
+  if (data.bio !== undefined) updatePayload.bio = data.bio;
+  if (data.statement !== undefined) updatePayload.statement = data.statement;
+  if (data.website !== undefined) updatePayload.website = data.website;
+  if (data.instagram !== undefined) updatePayload.instagram = data.instagram;
+  if (data.facebook !== undefined) updatePayload.facebook = data.facebook;
+  if (data.twitter !== undefined) updatePayload.twitter = data.twitter;
+  if (data.youtube !== undefined) updatePayload.youtube = data.youtube;
+  if (data.cvPdf !== undefined) updatePayload.cvPdf = data.cvPdf;
+  if (data.portfolioPdf !== undefined) updatePayload.portfolioPdf = data.portfolioPdf;
 
-  const updated = await prisma.artistProfile.update({
+  return await prisma.artistProfile.update({
     where: { id: artistId },
-    data: {
-      artistName: data.artistName,
-      bio: data.bio,
-      statement: data.statement,
-      website: data.website,
-      instagram: data.instagram,
-      facebook: data.facebook,
-      twitter: data.twitter,
-      youtube: data.youtube,
-      cvPdf: data.cvPdf,
-      portfolioPdf: data.portfolioPdf,
-    },
+    data: updatePayload,
   });
-
-  return updated;
 };

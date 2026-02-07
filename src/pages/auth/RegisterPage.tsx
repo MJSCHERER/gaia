@@ -23,7 +23,7 @@ const registerSchema = z
       .min(8, 'Password must be at least 8 characters')
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain uppercase, lowercase, and number'
+        'Password must contain uppercase, lowercase, and number',
       ),
     confirmPassword: z.string(),
     agreeToTerms: z.boolean().refine((val) => val === true, {
@@ -64,9 +64,7 @@ export default function RegisterPage() {
       navigate('/login');
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message || 'Registration failed'
-        );
+        toast.error(error.response?.data?.message || 'Registration failed');
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -79,9 +77,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold">{t('auth.register')}</h1>
-        <p className="text-muted-foreground mt-2">
-          Create an account to start collecting art.
-        </p>
+        <p className="text-muted-foreground mt-2">Create an account to start collecting art.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -94,9 +90,7 @@ export default function RegisterPage() {
               className={errors.firstName ? 'border-red-500' : ''}
             />
             {errors.firstName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.firstName.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
             )}
           </div>
           <div>
@@ -107,9 +101,7 @@ export default function RegisterPage() {
               className={errors.lastName ? 'border-red-500' : ''}
             />
             {errors.lastName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.lastName.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
             )}
           </div>
         </div>
@@ -123,9 +115,7 @@ export default function RegisterPage() {
             placeholder="you@example.com"
             className={errors.email ? 'border-red-500' : ''}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -142,17 +132,11 @@ export default function RegisterPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             >
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
@@ -165,9 +149,7 @@ export default function RegisterPage() {
             className={errors.confirmPassword ? 'border-red-500' : ''}
           />
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword.message}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -193,11 +175,7 @@ export default function RegisterPage() {
           className="w-full bg-violet-600 hover:bg-violet-700"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            t('auth.signUp')
-          )}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.signUp')}
         </Button>
       </form>
 

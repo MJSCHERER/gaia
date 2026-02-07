@@ -93,9 +93,7 @@ export default function ProfilePage() {
                       <Input
                         id="firstName"
                         value={formData.firstName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, firstName: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                       />
                     </div>
                     <div>
@@ -103,9 +101,7 @@ export default function ProfilePage() {
                       <Input
                         id="lastName"
                         value={formData.lastName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, lastName: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                       />
                     </div>
                   </div>
@@ -122,9 +118,7 @@ export default function ProfilePage() {
                       rows={4}
                       className="w-full px-3 py-2 border rounded-md bg-background"
                       value={formData.bio}
-                      onChange={(e) =>
-                        setFormData({ ...formData, bio: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                       placeholder="Tell us about yourself..."
                     />
                   </div>
@@ -147,9 +141,7 @@ export default function ProfilePage() {
             <TabsContent value="settings">
               <div className="bg-muted rounded-xl p-6">
                 <h3 className="font-semibold mb-4">{t('profile.settings')}</h3>
-                <p className="text-muted-foreground">
-                  Settings will be available soon.
-                </p>
+                <p className="text-muted-foreground">Settings will be available soon.</p>
               </div>
             </TabsContent>
           </Tabs>

@@ -15,7 +15,7 @@ export const getWishlist = asyncHandler(async (req: Request, res: Response) => {
 export const addToWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId } = req.body;
-  
+
   await addItem(userId, artworkId);
 
   res.status(201).json({
@@ -27,7 +27,7 @@ export const addToWishlist = asyncHandler(async (req: Request, res: Response) =>
 export const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId } = req.params;
-  
+
   await removeItem(userId, artworkId);
 
   res.json({

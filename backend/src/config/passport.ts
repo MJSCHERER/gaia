@@ -66,8 +66,8 @@ export const setupPassport = () => {
             logger.error('Google OAuth error:', error);
             done(error, false);
           }
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -130,13 +130,13 @@ export const setupPassport = () => {
             logger.error('Facebook OAuth error:', error);
             done(error, false);
           }
-        }
-      )
+        },
+      ),
     );
   }
 
   // Serialize user for session (not used with JWT, but required by passport)
-  passport.serializeUser((user: any, done) => {
+  passport.serializeUser((user: { id: string }, done) => {
     done(null, user.id);
   });
 

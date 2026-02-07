@@ -37,7 +37,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Response interceptor - handle token refresh
@@ -54,14 +54,11 @@ api.interceptors.response.use(
         const response = await axios.post(
           `${API_BASE_URL}/auth/refresh-token`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const { accessToken } = response.data.data;
-        useAuthStore.getState().setAuth(
-          useAuthStore.getState().user!,
-          accessToken
-        );
+        useAuthStore.getState().setAuth(useAuthStore.getState().user!, accessToken);
 
         // Retry original request
         originalRequest.headers = {
@@ -78,29 +75,24 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // Auth API
 export const authApi = {
   login: (email: string, password: string, rememberMe?: boolean) =>
     api.post('/auth/login', { email, password, rememberMe }),
-  register: (data: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }) => api.post('/auth/register', data),
+  register: (data: { email: string; password: string; firstName: string; lastName: string }) =>
+    api.post('/auth/register', data),
   logout: () => api.post('/auth/logout'),
   refreshToken: () => api.post('/auth/refresh-token'),
   getMe: () => api.get('/auth/me'),
-  updateProfile: (data: Partial<{ firstName: string; lastName: string; bio: string; avatar: string }>) =>
-    api.patch('/auth/profile', data),
+  updateProfile: (
+    data: Partial<{ firstName: string; lastName: string; bio: string; avatar: string }>,
+  ) => api.patch('/auth/profile', data),
   verifyEmail: (token: string) => api.get(`/auth/verify-email/${token}`),
-  resendVerification: (email: string) =>
-    api.post('/auth/resend-verification', { email }),
-  forgotPassword: (email: string) =>
-    api.post('/auth/forgot-password', { email }),
+  resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
+  forgotPassword: (email: string) => api.post('/auth/forgot-password', { email }),
   resetPassword: (token: string, password: string) =>
     api.post(`/auth/reset-password/${token}`, { password }),
   changePassword: (currentPassword: string, newPassword: string) =>
@@ -126,10 +118,8 @@ export const artistsApi = {
   getBySlug: (slug: string) => api.get(`/artists/${slug}`),
   getArtworks: (slug: string, params?: { page?: number; limit?: number }) =>
     api.get(`/artists/${slug}/artworks`, { params }),
-  getExhibitions: (slug: string) =>
-    api.get(`/artists/${slug}/exhibitions`),
-  getPublications: (slug: string) =>
-    api.get(`/artists/${slug}/publications`),
+  getExhibitions: (slug: string) => api.get(`/artists/${slug}/exhibitions`),
+  getPublications: (slug: string) => api.get(`/artists/${slug}/publications`),
 };
 
 // Artworks API
@@ -148,10 +138,8 @@ export const artworksApi = {
 // Cart API
 export const cartApi = {
   getCart: () => api.get('/cart'),
-  addItem: (artworkId: string, quantity?: number) =>
-    api.post('/cart', { artworkId, quantity }),
-  updateItem: (itemId: string, quantity: number) =>
-    api.patch(`/cart/${itemId}`, { quantity }),
+  addItem: (artworkId: string, quantity?: number) => api.post('/cart', { artworkId, quantity }),
+  updateItem: (itemId: string, quantity: number) => api.patch(`/cart/${itemId}`, { quantity }),
   removeItem: (itemId: string) => api.delete(`/cart/${itemId}`),
   clearCart: () => api.delete('/cart'),
 };
@@ -167,38 +155,29 @@ export const wishlistApi = {
 export const purchasesApi = {
   getPurchases: () => api.get('/purchases'),
   getPurchase: (id: string) => api.get(`/purchases/${id}`),
-  getDownloadLink: (itemId: string) =>
-    api.get(`/purchases/${itemId}/download`),
+  getDownloadLink: (itemId: string) => api.get(`/purchases/${itemId}/download`),
 };
 
 // Payments API
 export const paymentsApi = {
   createIntent: (
     items: Array<{ artworkId: string; quantity: number }>,
-    shippingAddress?: ShippingAddress
-  ) =>
-    api.post('/payments/create-intent', { items, shippingAddress }),
-  confirmPayment: (paymentIntentId: string) =>
-    api.post('/payments/confirm', { paymentIntentId }),
+    shippingAddress?: ShippingAddress,
+  ) => api.post('/payments/create-intent', { items, shippingAddress }),
+  confirmPayment: (paymentIntentId: string) => api.post('/payments/confirm', { paymentIntentId }),
   getPaymentMethods: () => api.get('/payments/methods'),
 };
 
 // Newsletter API
 export const newsletterApi = {
-  subscribe: (data: {
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    language?: string;
-  }) => api.post('/newsletter/subscribe', data),
-  unsubscribe: (email: string) =>
-    api.post('/newsletter/unsubscribe', { email }),
+  subscribe: (data: { email: string; firstName?: string; lastName?: string; language?: string }) =>
+    api.post('/newsletter/subscribe', data),
+  unsubscribe: (email: string) => api.post('/newsletter/unsubscribe', { email }),
 };
 
 // Interactions API
 export const interactionsApi = {
-  track: (data: InteractionPayload) =>
-    api.post('/interactions', data),
+  track: (data: InteractionPayload) => api.post('/interactions', data),
   getInteractions: () => api.get('/interactions'),
 };
 

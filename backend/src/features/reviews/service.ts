@@ -28,7 +28,7 @@ export const createNewReview = async (
   userId: string,
   artworkId: string,
   rating: number,
-  comment?: string
+  comment?: string,
 ) => {
   // Check if user has purchased this artwork
   const purchase = await prisma.purchase.findFirst({

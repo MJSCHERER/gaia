@@ -1,10 +1,37 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, CartItem } from '@prisma/client';
 import { createError } from '../../middleware/errorHandler';
 
 const prisma = new PrismaClient();
 
+// Type for grouped cart by artist
+interface GroupedCartItem {
+  artist: {
+    artistName: string;
+    slug: string;
+  };
+  items: CartItemWithArtwork[];
+  subtotal: number;
+}
+
+// Type for CartItem with artwork relation (only selected fields)
+interface CartItemWithArtwork extends CartItem {
+  artwork: {
+    id: string;
+    title: string;
+    slug: string;
+    thumbnail: string;
+    price: string; // Decimal wird als string geliefert von Prisma
+    currency: string;
+    isDigital: boolean;
+    artist: {
+      artistName: string;
+      slug: string;
+    };
+  };
+}
+
 export const getUserCart = async (userId: string) => {
-  const cartItems = await prisma.cartItem.findMany({
+  const cartItemsRaw = await prisma.cartItem.findMany({
     where: { userId },
     include: {
       artwork: {
@@ -28,39 +55,49 @@ export const getUserCart = async (userId: string) => {
     orderBy: { createdAt: 'desc' },
   });
 
+  // Prisma Decimal -> string konvertieren
+  const cartItems: CartItemWithArtwork[] = cartItemsRaw.map((item) => ({
+    ...item,
+    artwork: {
+      ...item.artwork,
+      price: item.artwork.price.toString(),
+    },
+  }));
+
   // Group by artist
-  const groupedByArtist = cartItems.reduce((acc: any, item: any) => {
-    const artistName = item.artwork.artist.artistName;
-    if (!acc[artistName]) {
-      acc[artistName] = {
-        artist: item.artwork.artist,
-        items: [],
-        subtotal: 0,
-      };
-    }
-    acc[artistName].items.push(item);
-    acc[artistName].subtotal += Number(item.artwork.price) * item.quantity;
-    return acc;
-  }, {});
+  const groupedByArtist: Record<string, GroupedCartItem> = cartItems.reduce(
+    (acc, item) => {
+      const artistName = item.artwork.artist.artistName;
+      if (!acc[artistName]) {
+        acc[artistName] = {
+          artist: item.artwork.artist,
+          items: [],
+          subtotal: 0,
+        };
+      }
+      acc[artistName].items.push(item);
+      acc[artistName].subtotal += Number(item.artwork.price) * item.quantity;
+      return acc;
+    },
+    {} as Record<string, GroupedCartItem>,
+  );
 
   const total = cartItems.reduce(
-    (sum: number, item: any) => sum + Number(item.artwork.price) * item.quantity,
-    0
+    (sum, item) => sum + Number(item.artwork.price) * item.quantity,
+    0,
   );
+
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return {
     items: cartItems,
     groupedByArtist: Object.values(groupedByArtist),
-    itemCount: cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0),
+    itemCount,
     total,
   };
 };
 
-export const addItemToCart = async (
-  userId: string,
-  artworkId: string,
-  quantity: number = 1
-) => {
+export const addItemToCart = async (userId: string, artworkId: string, quantity: number = 1) => {
   const artwork = await prisma.artwork.findUnique({
     where: { id: artworkId },
   });
@@ -94,11 +131,7 @@ export const addItemToCart = async (
   return getUserCart(userId);
 };
 
-export const updateItem = async (
-  userId: string,
-  itemId: string,
-  quantity: number
-) => {
+export const updateItem = async (userId: string, itemId: string, quantity: number) => {
   const cartItem = await prisma.cartItem.findFirst({
     where: {
       id: itemId,

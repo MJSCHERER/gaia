@@ -41,23 +41,17 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
     try {
-      const response = await authApi.login(
-        data.email,
-        data.password,
-        data.rememberMe
-      );
+      const response = await authApi.login(data.email, data.password, data.rememberMe);
       const { user, accessToken } = response.data.data;
       setAuth(user, accessToken);
       toast.success('Login successful!');
-      
+
       // Redirect to intended page or home
       const from = location.state?.from || '/';
       navigate(from);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message || 'Login failed'
-        );
+        toast.error(error.response?.data?.message || 'Login failed');
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -70,9 +64,7 @@ export default function LoginPage() {
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold">{t('auth.login')}</h1>
-        <p className="text-muted-foreground mt-2">
-          Welcome back! Please enter your details.
-        </p>
+        <p className="text-muted-foreground mt-2">Welcome back! Please enter your details.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -85,9 +77,7 @@ export default function LoginPage() {
             placeholder="you@example.com"
             className={errors.email ? 'border-red-500' : ''}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -104,17 +94,11 @@ export default function LoginPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             >
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
@@ -125,10 +109,7 @@ export default function LoginPage() {
               Remember me
             </Label>
           </div>
-          <Link
-            to="/forgot-password"
-            className="text-sm text-violet-600 hover:underline"
-          >
+          <Link to="/forgot-password" className="text-sm text-violet-600 hover:underline">
             {t('auth.forgotPassword')}
           </Link>
         </div>
@@ -138,11 +119,7 @@ export default function LoginPage() {
           className="w-full bg-violet-600 hover:bg-violet-700"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            t('auth.signIn')
-          )}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.signIn')}
         </Button>
       </form>
 

@@ -60,7 +60,8 @@ export default function Footer() {
               <span className="text-xl font-bold">Gaiamundi</span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
-              Where art meets the cosmos. Discover unique artworks from visionary artists around the world.
+              Where art meets the cosmos. Discover unique artworks from visionary artists around the
+              world.
             </p>
             {/* Social links */}
             <div className="flex gap-4">

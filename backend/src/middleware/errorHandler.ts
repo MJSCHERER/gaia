@@ -10,7 +10,8 @@ export const errorHandler = (
   err: AppError,
   req: Request,
   res: Response,
-  next: NextFunction
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction,
 ) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
@@ -46,7 +47,12 @@ export const createError = (message: string, statusCode: number): AppError => {
   return error;
 };
 
-export const asyncHandler = (fn: Function) => {
+// Typisierte Async Handler ohne 'any'
+export const asyncHandler = <
+  T extends (req: Request, res: Response, next: NextFunction) => Promise<unknown>,
+>(
+  fn: T,
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

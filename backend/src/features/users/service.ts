@@ -1,5 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole, AccountStatus } from '@prisma/client';
 import { createError } from '../../middleware/errorHandler';
+
+interface UpdateUserData {
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
+  avatar?: string;
+  role?: UserRole; // nur relevant, wenn Admin
+  status?: AccountStatus; // nur relevant, wenn Admin
+}
 
 const prisma = new PrismaClient();
 
@@ -57,9 +66,8 @@ export const getUserById = async (userId: string) => {
 export const updateUserById = async (
   userId: string,
   requestingUserId: string,
-  data: any
+  data: UpdateUserData,
 ) => {
-  // Check if user is updating their own profile or is admin
   const requestingUser = await prisma.user.findUnique({
     where: { id: requestingUserId },
     select: { role: true },

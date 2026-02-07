@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma, ArtworkCategory } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -15,7 +15,7 @@ export const getGalleryArtworks = async (filters: GalleryFilters) => {
   const skip = (page - 1) * limit;
 
   // Build where clause
-  const where: any = {
+  const where: Prisma.ArtworkWhereInput = {
     isAvailable: true,
   };
 
@@ -26,29 +26,35 @@ export const getGalleryArtworks = async (filters: GalleryFilters) => {
   }
 
   if (category) {
-    where.category = category.toUpperCase();
+    const upper = category.toUpperCase();
+    // Prüfen, ob der String ein gültiger Enum-Wert ist
+    if (Object.values(ArtworkCategory).includes(upper as ArtworkCategory)) {
+      where.category = upper as ArtworkCategory;
+    } else {
+      throw new Error(`Invalid category: ${category}`);
+    }
   }
 
   // Build order by
-  let orderBy: any = {};
+  let orderBy: Prisma.Enumerable<Prisma.ArtworkOrderByWithRelationInput> = [];
   switch (sort) {
     case 'newest':
-      orderBy = { createdAt: 'desc' };
+      orderBy = [{ createdAt: 'desc' }];
       break;
     case 'oldest':
-      orderBy = { createdAt: 'asc' };
+      orderBy = [{ createdAt: 'asc' }];
       break;
     case 'price-low':
-      orderBy = { price: 'asc' };
+      orderBy = [{ price: 'asc' }];
       break;
     case 'price-high':
-      orderBy = { price: 'desc' };
+      orderBy = [{ price: 'desc' }];
       break;
     case 'popular':
-      orderBy = { viewCount: 'desc' };
+      orderBy = [{ viewCount: 'desc' }];
       break;
     default:
-      orderBy = { createdAt: 'desc' };
+      orderBy = [{ createdAt: 'desc' }];
   }
 
   // Get artworks
@@ -104,10 +110,7 @@ export const getFeatured = async () => {
     where: {
       isAvailable: true,
     },
-    orderBy: [
-      { purchaseCount: 'desc' },
-      { viewCount: 'desc' },
-    ],
+    orderBy: [{ purchaseCount: 'desc' }, { viewCount: 'desc' }],
     take: 10,
     select: {
       id: true,
@@ -160,7 +163,7 @@ export const getArtistsForPreview = async () => {
     },
   });
 
-  return artists.map(artist => ({
+  return artists.map((artist) => ({
     id: artist.id,
     name: artist.artistName,
     slug: artist.slug,

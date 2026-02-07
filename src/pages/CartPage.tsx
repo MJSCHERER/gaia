@@ -10,7 +10,8 @@ export default function CartPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
-  const { items, removeItem, updateQuantity, getTotalPrice, clearCart, getItemsByArtist } = useCartStore();
+  const { items, removeItem, updateQuantity, getTotalPrice, clearCart, getItemsByArtist } =
+    useCartStore();
 
   const groupedItems = getItemsByArtist();
   const total = getTotalPrice();
@@ -30,9 +31,7 @@ export default function CartPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ShoppingBag className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{t('cart.empty')}</h1>
-          <p className="text-muted-foreground mb-6">
-            Discover beautiful artworks in our gallery
-          </p>
+          <p className="text-muted-foreground mb-6">Discover beautiful artworks in our gallery</p>
           <Button asChild className="bg-violet-600 hover:bg-violet-700">
             <Link to="/gallery">{t('cart.continueShopping')}</Link>
           </Button>
@@ -65,27 +64,23 @@ export default function CartPage() {
                         key={item.id}
                         className="flex gap-4 items-center bg-background rounded-lg p-4"
                       >
-                        <div className={`w-20 h-20 rounded-lg ${item.thumbnail || 'bg-violet-200'} flex-shrink-0`} />
+                        <div
+                          className={`w-20 h-20 rounded-lg ${item.thumbnail || 'bg-violet-200'} flex-shrink-0`}
+                        />
                         <div className="flex-1">
                           <h4 className="font-medium">{item.title}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            €{item.price}
-                          </p>
+                          <p className="text-sm text-muted-foreground">€{item.price}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-accent"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
                           <span className="w-8 text-center">{item.quantity}</span>
                           <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-accent"
                           >
                             <Plus className="w-4 h-4" />

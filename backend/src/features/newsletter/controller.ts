@@ -4,7 +4,7 @@ import { addSubscriber, removeSubscriber, getAllSubscribers } from './service';
 
 export const subscribe = asyncHandler(async (req: Request, res: Response) => {
   const { email, firstName, lastName, language } = req.body;
-  
+
   await addSubscriber({ email, firstName, lastName, language });
 
   res.json({
@@ -15,7 +15,7 @@ export const subscribe = asyncHandler(async (req: Request, res: Response) => {
 
 export const unsubscribe = asyncHandler(async (req: Request, res: Response) => {
   const { email } = req.body;
-  
+
   await removeSubscriber(email);
 
   res.json({

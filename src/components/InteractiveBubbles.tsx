@@ -12,6 +12,10 @@ interface Bubble {
   color: string;
   type: 'normal' | 'ufo' | 'mushroom' | 'clock' | 'duck';
   delay: number;
+  randomOffsetX: number;
+  randomOffsetY: number;
+  durationX: number;
+  durationY: number;
 }
 
 const pastelColors = [
@@ -23,53 +27,57 @@ const pastelColors = [
   'rgba(176, 224, 230, 0.6)', // Powder Blue
   'rgba(255, 240, 245, 0.6)', // Lavender Blush
   'rgba(240, 230, 140, 0.6)', // Khaki
-];
+] as const;
 
 const hiddenSurprises = ['ufo', 'mushroom', 'clock', 'duck'] as const;
+type HiddenType = (typeof hiddenSurprises)[number];
+
+// Utility: create a single bubble (stable single-shot random values)
+function createBubble(type: Bubble['type'] = 'normal'): Bubble {
+  return {
+    id: `bubble-${Date.now()}-${Math.floor(Math.random() * 1e9)}`,
+    x: Math.random() * 80 + 10, // 10% - 90%
+    y: Math.random() * 60 + 20, // 20% - 80%
+    size: Math.random() * 40 + 30, // 30 - 70 px
+    color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
+    type,
+    delay: Math.random() * 2,
+    randomOffsetX: Math.random() * 20 - 10,
+    randomOffsetY: Math.random() * 20 - 10,
+    durationX: 3 + Math.random() * 2,
+    durationY: 4 + Math.random() * 2,
+  };
+}
 
 export default function InteractiveBubbles() {
   const { t } = useTranslation();
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [bubbles, setBubbles] = useState<Bubble[]>(() =>
+    Array.from({ length: 5 }, () => createBubble()),
+  );
   const [poppedBubbles, setPoppedBubbles] = useState<Set<string>>(new Set());
+
+  // Hidden interactions store
   const { markFound, ufoFound, mushroomFound, clockFound, duckFound } =
     useHiddenInteractionsStore();
 
-  // Generate initial bubbles
-  useEffect(() => {
-    const initialBubbles: Bubble[] = Array.from({ length: 5 }, (_, i) => ({
-      id: `bubble-${i}`,
-      x: Math.random() * 80 + 10, // 10% to 90% of screen width
-      y: Math.random() * 60 + 20, // 20% to 80% of screen height
-      size: Math.random() * 40 + 30, // 30px to 70px
-      color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-      type: 'normal',
-      delay: Math.random() * 2,
-    }));
-    setBubbles(initialBubbles);
-  }, []);
-
-  // Respawn bubbles periodically
+  // Respawn bubbles periodically (adds either normal or a single hidden type if none present)
   useEffect(() => {
     const interval = setInterval(() => {
       setBubbles((prev) => {
         if (prev.length < 5) {
-          const hasHiddenSurprise = prev.some((b) =>
-            hiddenSurprises.includes(b.type as any)
+          const hasHidden = prev.some((b) =>
+            (hiddenSurprises as readonly string[]).includes(b.type),
           );
-          const shouldAddHidden = !hasHiddenSurprise && Math.random() < 0.3;
+          const shouldAddHidden = !hasHidden && Math.random() < 0.3;
 
-          const newBubble: Bubble = {
-            id: `bubble-${Date.now()}`,
-            x: Math.random() * 80 + 10,
-            y: Math.random() * 60 + 20,
-            size: Math.random() * 40 + 30,
-            color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
-            type: shouldAddHidden
-              ? hiddenSurprises[Math.floor(Math.random() * hiddenSurprises.length)]
-              : 'normal',
-            delay: 0,
-          };
-          return [...prev, newBubble];
+          if (shouldAddHidden) {
+            const chosen = hiddenSurprises[
+              Math.floor(Math.random() * hiddenSurprises.length)
+            ] as HiddenType;
+            return [...prev, createBubble(chosen)];
+          } else {
+            return [...prev, createBubble('normal')];
+          }
         }
         return prev;
       });
@@ -78,28 +86,45 @@ export default function InteractiveBubbles() {
     return () => clearInterval(interval);
   }, []);
 
+  // Handle popping a bubble: mark popped, remove from array, and handle hidden surprises.
   const handleBubblePop = useCallback(
     (bubble: Bubble) => {
-      if (poppedBubbles.has(bubble.id)) return;
+      // use functional updates to avoid stale closures and to prevent double-add
+      setPoppedBubbles((prev) => {
+        if (prev.has(bubble.id)) return prev;
+        const next = new Set(prev);
+        next.add(bubble.id);
+        return next;
+      });
 
-      setPoppedBubbles((prev) => new Set(prev).add(bubble.id));
       setBubbles((prev) => prev.filter((b) => b.id !== bubble.id));
 
-      // Handle hidden surprises
       if (bubble.type !== 'normal') {
-        markFound(bubble.type);
-        const messages: Record<string, string> = {
+        // mark found in store
+        markFound(bubble.type as Exclude<Bubble['type'], 'normal'>);
+
+        const messages: Record<Exclude<Bubble['type'], 'normal'>, string> = {
           ufo: t('hidden.ufoFound'),
           mushroom: t('hidden.mushroomFound'),
           clock: t('hidden.clockFound'),
           duck: t('hidden.duckFound'),
         };
-        toast.success(messages[bubble.type], {
-          icon: bubble.type === 'ufo' ? '🛸' : bubble.type === 'mushroom' ? '🍄' : bubble.type === 'clock' ? '🕰️' : '🦆',
+
+        const icon =
+          bubble.type === 'ufo'
+            ? '🛸'
+            : bubble.type === 'mushroom'
+              ? '🍄'
+              : bubble.type === 'clock'
+                ? '🕰️'
+                : '🦆';
+
+        toast.success(messages[bubble.type as Exclude<Bubble['type'], 'normal'>], {
+          icon,
           duration: 3000,
         });
 
-        // Check if all found
+        // If all found, celebratory message
         const allFound =
           (ufoFound || bubble.type === 'ufo') &&
           (mushroomFound || bubble.type === 'mushroom') &&
@@ -116,10 +141,10 @@ export default function InteractiveBubbles() {
         }
       }
     },
-    [poppedBubbles, markFound, t, ufoFound, mushroomFound, clockFound, duckFound]
+    [markFound, t, ufoFound, mushroomFound, clockFound, duckFound],
   );
 
-  const getBubbleIcon = (type: string) => {
+  const getBubbleIcon = (type: Bubble['type']) => {
     switch (type) {
       case 'ufo':
         return '🛸';
@@ -144,23 +169,15 @@ export default function InteractiveBubbles() {
             animate={{
               scale: poppedBubbles.has(bubble.id) ? 1.5 : 1,
               opacity: poppedBubbles.has(bubble.id) ? 0 : 1,
-              x: [0, Math.random() * 20 - 10, 0],
-              y: [0, Math.random() * 20 - 10, 0],
+              x: [0, bubble.randomOffsetX, 0],
+              y: [0, bubble.randomOffsetY, 0],
             }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{
               scale: { duration: 0.3 },
               opacity: { duration: 0.3 },
-              x: {
-                repeat: Infinity,
-                duration: 3 + Math.random() * 2,
-                ease: 'easeInOut',
-              },
-              y: {
-                repeat: Infinity,
-                duration: 4 + Math.random() * 2,
-                ease: 'easeInOut',
-              },
+              x: { repeat: Infinity, duration: bubble.durationX, ease: 'easeInOut' },
+              y: { repeat: Infinity, duration: bubble.durationY, ease: 'easeInOut' },
             }}
             style={{
               position: 'absolute',
@@ -187,20 +204,20 @@ export default function InteractiveBubbles() {
         ))}
       </AnimatePresence>
 
-      {/* Pop particles effect */}
       <AnimatePresence>
-        {Array.from(poppedBubbles).map((bubbleId) => (
-          <PopParticles key={bubbleId} bubbleId={bubbleId} />
+        {Array.from(poppedBubbles).map((id) => (
+          <PopParticles key={id} bubbleId={id} />
         ))}
       </AnimatePresence>
     </div>
   );
 }
 
-// Pop particles effect when bubble is clicked
-function PopParticles({ bubbleId: _bubbleId }: { bubbleId: string }) {
+// Pop particle effect — uses bubbleId so ESLint/TS won't mark it unused
+function PopParticles({ bubbleId }: { bubbleId: string }) {
   return (
     <motion.div
+      data-bubble-id={bubbleId}
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
       exit={{ opacity: 0 }}

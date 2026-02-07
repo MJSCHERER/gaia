@@ -10,7 +10,7 @@ export default function WishlistPage() {
   // Mock wishlist data
   const wishlistItems = [
     { id: 1, title: 'Cosmic Dreams', artist: 'Mel', price: 450 },
-    { id: 2, title: 'Nature\'s Whisper', artist: 'Mel', price: 520 },
+    { id: 2, title: "Nature's Whisper", artist: 'Mel', price: 520 },
   ];
 
   return (
@@ -26,20 +26,13 @@ export default function WishlistPage() {
           {wishlistItems.length > 0 ? (
             <div className="grid sm:grid-cols-2 gap-6">
               {wishlistItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-muted rounded-xl overflow-hidden"
-                >
+                <div key={item.id} className="bg-muted rounded-xl overflow-hidden">
                   <div className="aspect-video bg-violet-200" />
                   <div className="p-4">
                     <h3 className="font-semibold">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {item.artist}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{item.artist}</p>
                     <div className="flex items-center justify-between mt-4">
-                      <span className="text-violet-600 font-medium">
-                        €{item.price}
-                      </span>
+                      <span className="text-violet-600 font-medium">€{item.price}</span>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm">
                           <Heart className="w-4 h-4 fill-current" />
@@ -57,9 +50,7 @@ export default function WishlistPage() {
           ) : (
             <div className="text-center py-12 bg-muted rounded-xl">
               <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">
-                Your wishlist is empty
-              </p>
+              <p className="text-muted-foreground mb-4">Your wishlist is empty</p>
               <Button asChild className="bg-violet-600 hover:bg-violet-700">
                 <Link to="/gallery">Explore Gallery</Link>
               </Button>

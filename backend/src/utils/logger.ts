@@ -20,11 +20,7 @@ export const logger = winston.createLogger({
   transports: [
     // Console transport
     new winston.transports.Console({
-      format: combine(
-        colorize(),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        consoleFormat
-      ),
+      format: combine(colorize(), timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), consoleFormat),
     }),
     // File transport for production
     ...(process.env.NODE_ENV === 'production'

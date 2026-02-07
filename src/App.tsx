@@ -117,7 +117,7 @@ function OAuthCallback() {
       // This will be handled by the auth store
       window.opener?.postMessage(
         { type: 'OAUTH_SUCCESS', accessToken, expiresIn },
-        window.location.origin
+        window.location.origin,
       );
       window.close();
     } else {

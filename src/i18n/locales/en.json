@@ -147,7 +147,8 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "newsletter": "Subscribe to our newsletter",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "support": "Contact support"
   },
   "hidden": {
     "ufoFound": "🛸 You found the UFO!",
@@ -155,5 +156,8 @@
     "clockFound": "🕰️ The cuckoo clock chimes!",
     "duckFound": "🦆 Quack! Bath duck found!",
     "secretMessage": "You've discovered a secret!"
-  }
+  },
+  "accessToken": "Access Token",
+  "expiresIn": "Expires in",
+  "button": "Click"
 }

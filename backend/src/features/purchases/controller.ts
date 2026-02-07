@@ -15,7 +15,7 @@ export const getPurchases = asyncHandler(async (req: Request, res: Response) => 
 export const getPurchaseById = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { id } = req.params;
-  
+
   const purchase = await getPurchase(userId, id);
 
   res.json({
@@ -27,7 +27,7 @@ export const getPurchaseById = asyncHandler(async (req: Request, res: Response) 
 export const getDownloadLink = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { itemId } = req.params;
-  
+
   const download = await generateDownloadLink(userId, itemId);
 
   res.json({

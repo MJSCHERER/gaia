@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import {
-  Filter,
-  Grid3X3,
-  List,
-  ChevronDown,
-  Search,
-  X,
-} from 'lucide-react';
+import { Filter, Grid3X3, List, ChevronDown, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -22,14 +15,70 @@ import { useGalleryStore } from '@/store';
 
 // Mock data - would come from API
 const mockArtworks = [
-  { id: 1, title: 'Cosmic Dreams', artist: 'Mel', price: 450, category: 'fantasy', image: 'bg-violet-200' },
-  { id: 2, title: 'Ethereal Portrait', artist: 'Lena', price: 380, category: 'portrait', image: 'bg-pink-200' },
-  { id: 3, title: 'Nature\'s Whisper', artist: 'Mel', price: 520, category: 'nature', image: 'bg-green-200' },
-  { id: 4, title: 'Urban Fantasy', artist: 'Lena', price: 420, category: 'fantasy', image: 'bg-purple-200' },
-  { id: 5, title: 'Morning Light', artist: 'Mel', price: 350, category: 'nature', image: 'bg-yellow-200' },
-  { id: 6, title: 'Inner Vision', artist: 'Lena', price: 480, category: 'portrait', image: 'bg-blue-200' },
-  { id: 7, title: 'Forest Magic', artist: 'Mel', price: 550, category: 'fantasy', image: 'bg-emerald-200' },
-  { id: 8, title: 'Digital Dreams', artist: 'Lena', price: 390, category: 'illustration', image: 'bg-indigo-200' },
+  {
+    id: 1,
+    title: 'Cosmic Dreams',
+    artist: 'Mel',
+    price: 450,
+    category: 'fantasy',
+    image: 'bg-violet-200',
+  },
+  {
+    id: 2,
+    title: 'Ethereal Portrait',
+    artist: 'Lena',
+    price: 380,
+    category: 'portrait',
+    image: 'bg-pink-200',
+  },
+  {
+    id: 3,
+    title: "Nature's Whisper",
+    artist: 'Mel',
+    price: 520,
+    category: 'nature',
+    image: 'bg-green-200',
+  },
+  {
+    id: 4,
+    title: 'Urban Fantasy',
+    artist: 'Lena',
+    price: 420,
+    category: 'fantasy',
+    image: 'bg-purple-200',
+  },
+  {
+    id: 5,
+    title: 'Morning Light',
+    artist: 'Mel',
+    price: 350,
+    category: 'nature',
+    image: 'bg-yellow-200',
+  },
+  {
+    id: 6,
+    title: 'Inner Vision',
+    artist: 'Lena',
+    price: 480,
+    category: 'portrait',
+    image: 'bg-blue-200',
+  },
+  {
+    id: 7,
+    title: 'Forest Magic',
+    artist: 'Mel',
+    price: 550,
+    category: 'fantasy',
+    image: 'bg-emerald-200',
+  },
+  {
+    id: 8,
+    title: 'Digital Dreams',
+    artist: 'Lena',
+    price: 390,
+    category: 'illustration',
+    image: 'bg-indigo-200',
+  },
 ];
 
 const categories = [
@@ -106,9 +155,7 @@ export default function GalleryPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t('gallery.title')}
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4">{t('gallery.title')}</h1>
 
             {/* Search and Controls */}
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -193,21 +240,15 @@ export default function GalleryPage() {
                 <div className="flex flex-wrap gap-4">
                   {/* Category Filter */}
                   <div>
-                    <p className="text-sm font-medium mb-2">
-                      {t('gallery.categories')}
-                    </p>
+                    <p className="text-sm font-medium mb-2">{t('gallery.categories')}</p>
                     <div className="flex flex-wrap gap-2">
                       {categories.map((cat) => (
                         <Button
                           key={cat.id}
-                          variant={
-                            selectedCategory === cat.id ? 'default' : 'outline'
-                          }
+                          variant={selectedCategory === cat.id ? 'default' : 'outline'}
                           size="sm"
                           onClick={() =>
-                            setSelectedCategory(
-                              selectedCategory === cat.id ? null : cat.id
-                            )
+                            setSelectedCategory(selectedCategory === cat.id ? null : cat.id)
                           }
                         >
                           {t(`gallery.${cat.label}`)}
@@ -218,21 +259,15 @@ export default function GalleryPage() {
 
                   {/* Artist Filter */}
                   <div>
-                    <p className="text-sm font-medium mb-2">
-                      {t('artwork.artist')}
-                    </p>
+                    <p className="text-sm font-medium mb-2">{t('artwork.artist')}</p>
                     <div className="flex flex-wrap gap-2">
                       {['Mel', 'Lena'].map((artist) => (
                         <Button
                           key={artist}
-                          variant={
-                            selectedArtist === artist ? 'default' : 'outline'
-                          }
+                          variant={selectedArtist === artist ? 'default' : 'outline'}
                           size="sm"
                           onClick={() =>
-                            setSelectedArtist(
-                              selectedArtist === artist ? null : artist
-                            )
+                            setSelectedArtist(selectedArtist === artist ? null : artist)
                           }
                         >
                           {artist}
@@ -243,12 +278,7 @@ export default function GalleryPage() {
                 </div>
 
                 {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="mt-4"
-                  >
+                  <Button variant="ghost" size="sm" onClick={clearFilters} className="mt-4">
                     <X className="w-4 h-4 mr-2" />
                     Clear filters
                   </Button>
@@ -283,9 +313,7 @@ export default function GalleryPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-muted-foreground text-lg">
-                {t('gallery.noResults')}
-              </p>
+              <p className="text-muted-foreground text-lg">{t('gallery.noResults')}</p>
               <Button variant="outline" onClick={clearFilters} className="mt-4">
                 Clear filters
               </Button>
@@ -302,7 +330,7 @@ function ArtworkCard({
   artwork,
   viewMode,
 }: {
-  artwork: typeof mockArtworks[0];
+  artwork: (typeof mockArtworks)[0];
   viewMode: 'grid' | 'list';
 }) {
   if (viewMode === 'list') {
@@ -315,9 +343,7 @@ function ArtworkCard({
         <div className="flex-1">
           <h3 className="font-semibold text-lg">{artwork.title}</h3>
           <p className="text-muted-foreground">{artwork.artist}</p>
-          <p className="text-violet-600 font-medium mt-1">
-            €{artwork.price}
-          </p>
+          <p className="text-violet-600 font-medium mt-1">€{artwork.price}</p>
         </div>
       </Link>
     );

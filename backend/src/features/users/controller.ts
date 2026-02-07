@@ -24,7 +24,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const requestingUserId = req.user!.id;
-  
+
   const user = await updateUserById(id, requestingUserId, req.body);
 
   res.json({

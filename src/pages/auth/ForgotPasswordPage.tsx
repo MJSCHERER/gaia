@@ -39,9 +39,7 @@ export default function ForgotPasswordPage() {
       toast.success('Reset link sent to your email');
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message || 'Failed to send reset link'
-        );
+        toast.error(error.response?.data?.message || 'Failed to send reset link');
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -87,9 +85,7 @@ export default function ForgotPasswordPage() {
             placeholder="you@example.com"
             className={errors.email ? 'border-red-500' : ''}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         <Button
@@ -97,11 +93,7 @@ export default function ForgotPasswordPage() {
           className="w-full bg-violet-600 hover:bg-violet-700"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            t('auth.sendResetLink')
-          )}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.sendResetLink')}
         </Button>
       </form>
 

@@ -47,11 +47,7 @@ export default function CheckoutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/cart')}
-            className="mb-6"
-          >
+          <Button variant="ghost" onClick={() => navigate('/cart')} className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Cart
           </Button>
@@ -64,9 +60,7 @@ export default function CheckoutPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Shipping Address */}
                 <div className="bg-muted rounded-xl p-6">
-                  <h2 className="font-semibold mb-4">
-                    {t('checkout.shippingAddress')}
-                  </h2>
+                  <h2 className="font-semibold mb-4">{t('checkout.shippingAddress')}</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <Label>First Name</Label>
@@ -97,17 +91,13 @@ export default function CheckoutPage() {
 
                 {/* Payment Method */}
                 <div className="bg-muted rounded-xl p-6">
-                  <h2 className="font-semibold mb-4">
-                    {t('checkout.paymentMethod')}
-                  </h2>
+                  <h2 className="font-semibold mb-4">{t('checkout.paymentMethod')}</h2>
                   <div className="flex gap-4 mb-4">
                     <button
                       type="button"
                       onClick={() => setPaymentMethod('card')}
                       className={`flex-1 p-4 rounded-lg border-2 transition-colors ${
-                        paymentMethod === 'card'
-                          ? 'border-violet-600 bg-violet-50'
-                          : 'border-muted'
+                        paymentMethod === 'card' ? 'border-violet-600 bg-violet-50' : 'border-muted'
                       }`}
                     >
                       {t('checkout.creditCard')}
@@ -165,9 +155,7 @@ export default function CheckoutPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="bg-muted rounded-xl p-6 sticky top-24">
-                <h2 className="font-semibold mb-4">
-                  {t('checkout.orderSummary')}
-                </h2>
+                <h2 className="font-semibold mb-4">{t('checkout.orderSummary')}</h2>
                 <div className="space-y-2 mb-4">
                   {items.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
@@ -180,15 +168,11 @@ export default function CheckoutPage() {
                 </div>
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      {t('cart.subtotal')}
-                    </span>
+                    <span className="text-muted-foreground">{t('cart.subtotal')}</span>
                     <span>€{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      {t('cart.shipping')}
-                    </span>
+                    <span className="text-muted-foreground">{t('cart.shipping')}</span>
                     <span>€{shipping.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">

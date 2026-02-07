@@ -15,7 +15,7 @@ export const getReviews = asyncHandler(async (req: Request, res: Response) => {
 export const createReview = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const { artworkId, rating, comment } = req.body;
-  
+
   const review = await createNewReview(userId, artworkId, rating, comment);
 
   res.status(201).json({
@@ -27,7 +27,7 @@ export const createReview = asyncHandler(async (req: Request, res: Response) => 
 
 export const approveReview = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+
   const review = await approveReviewById(id);
 
   res.json({
@@ -39,7 +39,7 @@ export const approveReview = asyncHandler(async (req: Request, res: Response) =>
 
 export const deleteReview = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  
+
   await deleteReviewById(id);
 
   res.json({

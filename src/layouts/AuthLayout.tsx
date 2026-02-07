@@ -13,7 +13,8 @@ export default function AuthLayout() {
             <span className="text-3xl font-bold">Gaiamundi</span>
           </Link>
           <p className="text-lg text-white/80 max-w-md">
-            Where art meets the cosmos. Discover unique artworks from visionary artists around the world.
+            Where art meets the cosmos. Discover unique artworks from visionary artists around the
+            world.
           </p>
         </div>
       </div>

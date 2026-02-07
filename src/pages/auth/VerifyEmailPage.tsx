@@ -26,9 +26,7 @@ export default function VerifyEmailPage() {
         setStatus('error');
 
         if (axios.isAxiosError(error)) {
-          setMessage(
-            error.response?.data?.message || 'Failed to verify email'
-          );
+          setMessage(error.response?.data?.message || 'Failed to verify email');
         } else if (error instanceof Error) {
           setMessage(error.message);
         } else {
@@ -46,9 +44,7 @@ export default function VerifyEmailPage() {
         <>
           <Loader2 className="w-16 h-16 animate-spin text-violet-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">Verifying...</h1>
-          <p className="text-muted-foreground">
-            Please wait while we verify your email address.
-          </p>
+          <p className="text-muted-foreground">Please wait while we verify your email address.</p>
         </>
       )}
 

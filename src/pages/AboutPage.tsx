@@ -13,7 +13,7 @@ export default function AboutPage() {
       bio: 'Mel is a visionary artist whose work explores the ethereal boundaries between the natural world and the cosmic realm. With a background in fine arts and digital media, Mel creates pieces that transport viewers to otherworldly landscapes.',
       exhibitions: [
         { year: '2023', title: 'Cosmic Visions', venue: 'Berlin Art Gallery' },
-        { year: '2022', title: 'Nature\'s Dreams', venue: 'Munich Contemporary' },
+        { year: '2022', title: "Nature's Dreams", venue: 'Munich Contemporary' },
         { year: '2021', title: 'Ethereal Light', venue: 'Hamburg Art Space' },
       ],
       publications: [
@@ -42,22 +42,26 @@ export default function AboutPage() {
     {
       icon: Palette,
       title: 'Artistic Excellence',
-      description: 'We curate only the finest artworks, ensuring each piece meets our high standards of creativity and craftsmanship.',
+      description:
+        'We curate only the finest artworks, ensuring each piece meets our high standards of creativity and craftsmanship.',
     },
     {
       icon: Heart,
       title: 'Artist Support',
-      description: 'We believe in fair compensation for artists, providing them with a platform to thrive and grow their careers.',
+      description:
+        'We believe in fair compensation for artists, providing them with a platform to thrive and grow their careers.',
     },
     {
       icon: Globe,
       title: 'Global Community',
-      description: 'We connect artists and collectors from around the world, fostering a diverse and inclusive creative ecosystem.',
+      description:
+        'We connect artists and collectors from around the world, fostering a diverse and inclusive creative ecosystem.',
     },
     {
       icon: Sparkles,
       title: 'Unique Discoveries',
-      description: 'Every artwork on our platform is unique, offering collectors the opportunity to own something truly special.',
+      description:
+        'Every artwork on our platform is unique, offering collectors the opportunity to own something truly special.',
     },
   ];
 
@@ -72,11 +76,10 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              {t('about.title')}
-            </h1>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">{t('about.title')}</h1>
             <p className="text-lg text-muted-foreground">
-              Discover the story behind Gaiamundi and the artists who make our platform extraordinary.
+              Discover the story behind Gaiamundi and the artists who make our platform
+              extraordinary.
             </p>
           </motion.div>
         </div>
@@ -97,9 +100,7 @@ export default function AboutPage() {
                 {t('about.philosophyText')}
               </p>
               <h3 className="text-xl font-semibold mb-4">{t('about.mission')}</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {t('about.missionText')}
-              </p>
+              <p className="text-muted-foreground leading-relaxed">{t('about.missionText')}</p>
             </motion.div>
 
             <motion.div
@@ -120,9 +121,7 @@ export default function AboutPage() {
                 >
                   <value.icon className="w-8 h-8 text-violet-600 mb-4" />
                   <h4 className="font-semibold mb-2">{value.title}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {value.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{value.description}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -140,9 +139,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t('about.artists')}
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t('about.artists')}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Meet the visionary creators behind our collection
             </p>
@@ -162,18 +159,14 @@ export default function AboutPage() {
                   {/* Artist Image Placeholder */}
                   <div className="lg:col-span-1">
                     <div className="aspect-square rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
-                      <span className="text-6xl font-bold text-violet-300">
-                        {artist.name[0]}
-                      </span>
+                      <span className="text-6xl font-bold text-violet-300">{artist.name[0]}</span>
                     </div>
                   </div>
 
                   {/* Artist Info */}
                   <div className="lg:col-span-2">
                     <h3 className="text-2xl font-bold mb-2">{artist.name}</h3>
-                    <p className="text-violet-600 font-medium mb-4">
-                      {artist.specialty}
-                    </p>
+                    <p className="text-violet-600 font-medium mb-4">{artist.specialty}</p>
                     <p className="text-muted-foreground mb-6">{artist.bio}</p>
 
                     {/* Exhibitions */}
@@ -185,13 +178,9 @@ export default function AboutPage() {
                             key={i}
                             className="text-sm text-muted-foreground flex items-center gap-2"
                           >
-                            <span className="text-violet-600 font-medium">
-                              {exhibition.year}
-                            </span>
+                            <span className="text-violet-600 font-medium">{exhibition.year}</span>
                             <span>{exhibition.title}</span>
-                            <span className="text-muted-foreground/60">
-                              — {exhibition.venue}
-                            </span>
+                            <span className="text-muted-foreground/60">— {exhibition.venue}</span>
                           </li>
                         ))}
                       </ul>
@@ -206,9 +195,7 @@ export default function AboutPage() {
                             key={i}
                             className="text-sm text-muted-foreground flex items-center gap-2"
                           >
-                            <span className="text-violet-600 font-medium">
-                              {pub.year}
-                            </span>
+                            <span className="text-violet-600 font-medium">{pub.year}</span>
                             <span>{pub.title}</span>
                           </li>
                         ))}

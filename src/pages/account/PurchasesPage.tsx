@@ -52,9 +52,7 @@ export default function PurchasesPage() {
                       <p className="text-sm text-muted-foreground">
                         {purchase.items.map((item) => item.title).join(', ')}
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        {purchase.date}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{purchase.date}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">

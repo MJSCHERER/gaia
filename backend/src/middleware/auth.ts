@@ -5,14 +5,10 @@ import { createError } from './errorHandler';
 
 const prisma = new PrismaClient();
 
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw createError('Authentication required', 401);
     }
@@ -75,14 +71,10 @@ export const authorize = (...roles: string[]) => {
   };
 };
 
-export const optionalAuth = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return next();
     }
@@ -114,6 +106,7 @@ export const optionalAuth = async (
 
     next();
   } catch (error) {
+    console.error('Optional auth error:', error);
     // Continue without auth for optional auth
     next();
   }

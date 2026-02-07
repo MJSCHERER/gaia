@@ -147,7 +147,8 @@
     "privacy": "Privacidad",
     "terms": "Términos de Servicio",
     "newsletter": "Suscríbete a nuestro boletín",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "support": "Contactar con soporte"
   },
   "hidden": {
     "ufoFound": "🛸 ¡Encontraste el OVNI!",
@@ -155,5 +156,8 @@
     "clockFound": "🕰️ ¡El cucú suena!",
     "duckFound": "🦆 ¡Cuac! ¡Pato de baño encontrado!",
     "secretMessage": "¡Has descubierto un secreto!"
-  }
+  },
+  "accessToken": "Token de acceso",
+  "expiresIn": "Expira en",
+  "button": "Clic"
 }

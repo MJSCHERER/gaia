@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { createError } from '../../middleware/errorHandler';
 
 const prisma = new PrismaClient();
@@ -53,8 +53,8 @@ export const addItem = async (userId: string, artworkId: string) => {
       where: { id: artworkId },
       data: { wishlistCount: { increment: 1 } },
     });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       throw createError('Already in wishlist', 409);
     }
     throw error;

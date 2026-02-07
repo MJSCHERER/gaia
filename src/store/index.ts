@@ -27,10 +27,8 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       accessToken: null,
       isAuthenticated: false,
-      setAuth: (user, token) =>
-        set({ user, accessToken: token, isAuthenticated: true }),
-      clearAuth: () =>
-        set({ user: null, accessToken: null, isAuthenticated: false }),
+      setAuth: (user, token) => set({ user, accessToken: token, isAuthenticated: true }),
+      clearAuth: () => set({ user: null, accessToken: null, isAuthenticated: false }),
       updateUser: (userData) =>
         set((state) => ({
           user: state.user ? { ...state.user, ...userData } : null,
@@ -38,8 +36,8 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-    }
-  )
+    },
+  ),
 );
 
 // Cart Store
@@ -73,15 +71,11 @@ export const useCartStore = create<CartState>()(
       items: [],
       addItem: (item) =>
         set((state) => {
-          const existingItem = state.items.find(
-            (i) => i.artworkId === item.artworkId
-          );
+          const existingItem = state.items.find((i) => i.artworkId === item.artworkId);
           if (existingItem) {
             return {
               items: state.items.map((i) =>
-                i.artworkId === item.artworkId
-                  ? { ...i, quantity: i.quantity + item.quantity }
-                  : i
+                i.artworkId === item.artworkId ? { ...i, quantity: i.quantity + item.quantity } : i,
               ),
             };
           }
@@ -96,18 +90,12 @@ export const useCartStore = create<CartState>()(
           items:
             quantity <= 0
               ? state.items.filter((i) => i.id !== id)
-              : state.items.map((i) =>
-                  i.id === id ? { ...i, quantity } : i
-                ),
+              : state.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
         })),
       clearCart: () => set({ items: [] }),
-      getTotalItems: () =>
-        get().items.reduce((total, item) => total + item.quantity, 0),
+      getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
       getTotalPrice: () =>
-        get().items.reduce(
-          (total, item) => total + item.price * item.quantity,
-          0
-        ),
+        get().items.reduce((total, item) => total + item.price * item.quantity, 0),
       getItemsByArtist: () => {
         const grouped: Record<string, CartItem[]> = {};
         get().items.forEach((item) => {
@@ -121,8 +109,8 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'cart-storage',
-    }
-  )
+    },
+  ),
 );
 
 // UI Store
@@ -152,14 +140,13 @@ export const useUIStore = create<UIState>()(
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setLoading: (isLoading) => set({ isLoading }),
-      showToast: (message, type) =>
-        set({ toast: { show: true, message, type } }),
+      showToast: (message, type) => set({ toast: { show: true, message, type } }),
       hideToast: () => set({ toast: null }),
     }),
     {
       name: 'ui-storage',
-    }
-  )
+    },
+  ),
 );
 
 // Gallery Store
@@ -221,6 +208,6 @@ export const useHiddenInteractionsStore = create<HiddenInteractionsState>()(
     }),
     {
       name: 'hidden-interactions-storage',
-    }
-  )
+    },
+  ),
 );

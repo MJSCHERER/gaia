@@ -42,9 +42,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             </p>
             {this.state.error && (
               <div className="bg-muted p-4 rounded-lg mb-6 text-left">
-                <p className="text-sm font-mono text-red-500">
-                  {this.state.error.message}
-                </p>
+                <p className="text-sm font-mono text-red-500">{this.state.error.message}</p>
               </div>
             )}
             <Button onClick={this.handleReset} className="gap-2">

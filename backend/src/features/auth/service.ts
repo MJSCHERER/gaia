@@ -17,9 +17,14 @@ const JWT_EXPIRES_IN: SignOptions['expiresIn'] =
 const JWT_REFRESH_EXPIRES_IN: SignOptions['expiresIn'] =
   (process.env.JWT_REFRESH_EXPIRES_IN as SignOptions['expiresIn']) || '7d';
 
+interface TokenUser {
+  id: string;
+  email: string;
+  role: 'GUEST' | 'COLLECTOR' | 'ARTIST' | 'ADMIN';
+}
 
 // Generate tokens
-export const generateTokens = (user: any) => {
+export const generateTokens = (user: TokenUser) => {
   const accessToken = jwt.sign(
     {
       userId: user.id,
@@ -27,7 +32,7 @@ export const generateTokens = (user: any) => {
       role: user.role,
     },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRES_IN }
+    { expiresIn: JWT_EXPIRES_IN },
   );
 
   const refreshToken = jwt.sign(
@@ -36,7 +41,7 @@ export const generateTokens = (user: any) => {
       tokenId: uuidv4(),
     },
     JWT_REFRESH_SECRET,
-    { expiresIn: JWT_REFRESH_EXPIRES_IN }
+    { expiresIn: JWT_REFRESH_EXPIRES_IN },
   );
 
   return {
@@ -113,11 +118,7 @@ export const registerUser = async (data: {
 };
 
 // Login user
-export const loginUser = async (
-  email: string,
-  password: string,
-  rememberMe: boolean = false
-) => {
+export const loginUser = async (email: string, password: string, rememberMe: boolean = false) => {
   // Find user
   const user = await prisma.user.findUnique({
     where: { email },
@@ -364,7 +365,7 @@ export const resetPasswordWithToken = async (token: string, newPassword: string)
   const user = await prisma.user.findUnique({
     where: { email: resetToken.email },
   });
-  
+
   if (user) {
     await prisma.refreshToken.deleteMany({
       where: { userId: user.id },
@@ -376,7 +377,7 @@ export const resetPasswordWithToken = async (token: string, newPassword: string)
 export const changeUserPassword = async (
   userId: string,
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
 ) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -449,7 +450,7 @@ export const updateUserProfile = async (
     lastName?: string;
     bio?: string;
     avatar?: string;
-  }
+  },
 ) => {
   const user = await prisma.user.update({
     where: { id: userId },

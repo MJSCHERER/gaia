@@ -130,9 +130,7 @@ export default function ArtworkDetailPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Image */}
             <div className="aspect-square bg-gradient-to-br from-violet-200 to-purple-200 rounded-2xl flex items-center justify-center">
-              <span className="text-8xl font-bold text-white/50">
-                {artwork.title[0]}
-              </span>
+              <span className="text-8xl font-bold text-white/50">{artwork.title[0]}</span>
             </div>
 
             {/* Details */}
@@ -149,15 +147,9 @@ export default function ArtworkDetailPage() {
                   </Link>
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleWishlist}
-                  >
+                  <Button variant="outline" size="icon" onClick={handleWishlist}>
                     <Heart
-                      className={`w-5 h-5 ${
-                        isWishlisted ? 'fill-red-500 text-red-500' : ''
-                      }`}
+                      className={`w-5 h-5 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`}
                     />
                   </Button>
                   <Button variant="outline" size="icon">
@@ -170,23 +162,15 @@ export default function ArtworkDetailPage() {
                 <div className="flex items-center gap-1">
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{artwork.rating}</span>
-                  <span className="text-muted-foreground">
-                    ({artwork.reviews} reviews)
-                  </span>
+                  <span className="text-muted-foreground">({artwork.reviews} reviews)</span>
                 </div>
                 <span className="text-muted-foreground">|</span>
-                <span className="text-muted-foreground capitalize">
-                  {artwork.category}
-                </span>
+                <span className="text-muted-foreground capitalize">{artwork.category}</span>
               </div>
 
-              <p className="text-3xl font-bold text-violet-600 mb-6">
-                €{artwork.price}
-              </p>
+              <p className="text-3xl font-bold text-violet-600 mb-6">€{artwork.price}</p>
 
-              <p className="text-muted-foreground mb-6">
-                {artwork.description}
-              </p>
+              <p className="text-muted-foreground mb-6">{artwork.description}</p>
 
               <div className="flex items-center gap-4 mb-6 text-sm">
                 <div className="flex items-center gap-2">
@@ -217,22 +201,14 @@ export default function ArtworkDetailPage() {
 
               <Tabs defaultValue="description">
                 <TabsList>
-                  <TabsTrigger value="description">
-                    {t('artwork.description')}
-                  </TabsTrigger>
-                  <TabsTrigger value="reviews">
-                    {t('artwork.reviews')}
-                  </TabsTrigger>
+                  <TabsTrigger value="description">{t('artwork.description')}</TabsTrigger>
+                  <TabsTrigger value="reviews">{t('artwork.reviews')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="description" className="mt-4">
-                  <p className="text-muted-foreground">
-                    {artwork.description}
-                  </p>
+                  <p className="text-muted-foreground">{artwork.description}</p>
                 </TabsContent>
                 <TabsContent value="reviews" className="mt-4">
-                  <p className="text-muted-foreground">
-                    Reviews will be displayed here.
-                  </p>
+                  <p className="text-muted-foreground">Reviews will be displayed here.</p>
                 </TabsContent>
               </Tabs>
             </div>

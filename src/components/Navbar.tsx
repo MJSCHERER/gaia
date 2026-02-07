@@ -25,6 +25,8 @@ import { useAuthStore, useCartStore, useUIStore } from '@/store';
 import { authApi } from '@/services/api';
 import { toast } from 'sonner';
 
+type Theme = 'system' | 'light' | 'dark';
+
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
@@ -68,10 +70,31 @@ export default function Navbar() {
     i18n.changeLanguage(langCode);
     setLanguage(langCode);
   };
+  
+  useEffect(() => {
+    if (!theme) {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    }
+  }, [theme, setTheme]);
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    if (storedTheme) {
+      setTheme(storedTheme);
+      document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+    } else {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [setTheme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
@@ -86,9 +109,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-sm'
-          : 'bg-transparent'
+        isScrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,9 +129,7 @@ export default function Navbar() {
                 key={link.to}
                 to={link.to}
                 className={`text-sm font-medium transition-colors hover:text-violet-600 ${
-                  isActive(link.to)
-                    ? 'text-violet-600'
-                    : 'text-foreground/80'
+                  isActive(link.to) ? 'text-violet-600' : 'text-foreground/80'
                 }`}
               >
                 {link.label}
@@ -121,17 +140,8 @@ export default function Navbar() {
           {/* Right side actions */}
           <div className="flex items-center gap-2">
             {/* Theme toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="hidden sm:flex"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
 
             {/* Language selector */}
@@ -156,12 +166,7 @@ export default function Navbar() {
             </DropdownMenu>
 
             {/* Wishlist */}
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="hidden sm:flex"
-            >
+            <Button variant="ghost" size="icon" asChild className="hidden sm:flex">
               <Link to="/account/wishlist">
                 <Heart className="w-5 h-5" />
               </Link>
@@ -226,11 +231,7 @@ export default function Navbar() {
               className="md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </Button>
           </div>
         </div>

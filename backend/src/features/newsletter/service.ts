@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { sendEmail } from '../../services/email';
 import { logger } from '../../utils/logger';
 
@@ -33,8 +33,8 @@ export const addSubscriber = async (data: SubscribeData) => {
     });
 
     logger.info(`Newsletter subscription: ${data.email}`);
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       // Already subscribed, reactivate if unsubscribed
       await prisma.newsletterSubscriber.update({
         where: { email: data.email },
